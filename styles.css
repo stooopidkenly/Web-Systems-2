@@ -10,18 +10,55 @@ header {
     padding-top: 15px;
 }
 
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 5%;
+    padding-left: 2%;
+}
+
+.links ul {
+    display: flex;
+    gap: 50px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.links a {
+    text-decoration: none;
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: black;
+    transition: color 0.3s ease;
+}
+
+.links a:hover {
+    background: radial-gradient(circle, #5555FF, #D455FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
 .title1 {
     font-family: "Poppins", sans-serif;
     font-weight: 600;
     font-style: italic;
     font-size: 30px;
     margin: 0;
-    margin-left: 2%;
     background: radial-gradient(circle, #5555FF, #D455FF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     opacity: 0;
     animation: fadeSlideUp 1.2s ease-in forwards;
+}
+
+.links {
+    padding: 0;
+    display: flex;
+    justify-content: center;
 }
 
 .line {
@@ -32,34 +69,30 @@ header {
 }
 
 .bodyContainer {
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 10%;
+    margin-top: 13%;
     font-family: "Poppins", sans-serif;
     font-weight: 600;
-    line-height: 1.1;
+    line-height: 1;
 }
 
 .headerTitle {
     margin: 0;
+    margin-bottom: 2%;
     font-size: 90px;
     opacity: 0;
     animation: fadeSlideUp 1.2s ease-out forwards;
+    text-align: center;
 }
 
 .headerTitle1 {
-    margin: 0px;
     font-size: 80px;
     background: linear-gradient(90deg, #5555FF, #D455FF, #5555FF);
-    background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    opacity: 0;
-    animation: fadeSlideUp 1.2s ease-out forwards, linear infinite;
-    animation-delay: 0.5s;
 }
 
 .description {
@@ -72,38 +105,18 @@ header {
     opacity: 0;
     animation: fadeSlideUp 1.2s ease-out forwards;
     animation-delay: 1s;
+    text-align: center;
 }
 
-.description1 {
-    font-family: "Inter", sans-serif;
-    font-size: 35px;
-    font-weight: 100;
-    font-style: normal;
-    margin-top: 0;
-    opacity: 0;
-    animation: fadeSlideUp 1.2s ease-out forwards;
-    animation-delay: 1.3s;
-}
-
-.btnToAbout {
-    width: 120px;
-    height: 40px;
-    border: none;
-    border-radius: 50px;
-    font-family: "Inter", sans-serif;
-    font-size: 15px;
-    font-weight: bold;
-    background: linear-gradient(75deg, #5555FF, #D455FF);
-    -webkit-text-fill-color: black;
-    margin-top: 20px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0;
-    animation: fadeSlideUp 1.2s ease-out forwards;
-    animation-delay: 1.6s;
-}
-
-.btnToAbout a {
-    text-decoration: none;
+.hi {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 50px;
+    margin: 0;
+    margin-left: 1%;
+    background: radial-gradient(circle, #5555FF, #D455FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 @keyframes fadeSlideUp {
