@@ -21,6 +21,7 @@ header {
     flex: 1;
     display: flex;
     justify-content: center;
+    animation: fadeSlideUp 1.2s ease-out forwards;
 }
 
 .links ul {
@@ -47,7 +48,6 @@ header {
     -webkit-text-fill-color: transparent;
 }
 
-
 .title1 {
     font-family: "Poppins", sans-serif;
     font-weight: 600;
@@ -73,7 +73,7 @@ header {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-top: 13%;
+    margin-top: 15%;
     font-family: "Poppins", sans-serif;
     font-weight: 600;
     line-height: 1;
@@ -81,6 +81,7 @@ header {
 
 .headerTitle {
     margin: 0;
+    margin-top: 2%;
     margin-bottom: 2%;
     font-size: 50px;
     opacity: 0;
@@ -93,19 +94,6 @@ header {
     background: linear-gradient(90deg, #5555FF, #D455FF, #5555FF);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}
-
-.description {
-    font-family: "Inter", sans-serif;
-    font-size: 25px;
-    font-weight: 100;
-    font-style: normal;
-    margin-bottom: 0;
-    margin-top: 20px;
-    opacity: 0;
-    animation: fadeSlideUp 1.2s ease-out forwards;
-    animation-delay: 1s;
-    text-align: center;
 }
 
 .hi {
@@ -121,31 +109,43 @@ header {
 
 .about {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     margin-top: 20%;
     font-family: "Poppins", sans-serif;
     font-size: 25px;
     opacity: 0;
     animation: fadeSlideUp 1.2s ease-in forwards;
-    position: relative;
+    padding: 0 5%;
 }
 
 .info {
-    position: absolute;
-    margin-top: 10%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    margin-top: 5%;
     font-family: "Inter", sans-serif;
-    font-size: 25px;
-    font-weight: 100;
+    font-size: 20px;
+    font-weight: 300;
     font-style: normal;
     opacity: 0;
     animation: fadeSlideUp 1.2s ease-out forwards;
     animation-delay: 1s;
-    text-align: center;
-    left: 15%;
+    max-width: 1200px;
 }
 
 .info p {
-    line-height: 0.2;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.profile {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    object-fit: cover;
 }
 
 @keyframes fadeSlideUp {
@@ -201,6 +201,11 @@ header {
 
     footer {
         font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .info {
+        flex-direction: column;
         text-align: center;
     }
 }
