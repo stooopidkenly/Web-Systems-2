@@ -238,6 +238,9 @@
                 <p><strong>Email:</strong> johnkenly@example.com</p>
                 <p><strong>Phone:</strong> +63 912 345 6789</p>
                 <p><strong>Address:</strong> Pili, Camarines Sur, Philippines</p>
+                <p><Strong><a href="https://github.com/stooopidkenly">Github</a></Strong></p>
+                <p><Strong><a href="https://www.facebook.com/johnkenly.pamor.13">Facebook</a></Strong></p>
+                <p><Strong><a href="https://www.instagram.com/heykenlyp_/">Instagram</a></Strong></p>
             </div>
 
             <!-- Right Side: Contact Form -->
@@ -261,11 +264,10 @@
 
 
     <footer>
-        <p>Special Credits: AI models and LLMs ❤️</p>
+        <!-- <p>Special Credits: AI models and LLMs ❤️</p> -->
         <p>Bachelor of Science in Information Technology</p>
         <p>Camarines Sur Polytechnic Colleges</p>
     </footer>
-
 
     <script>
         const roles = [
