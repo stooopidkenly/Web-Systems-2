@@ -230,6 +230,43 @@
         </div>
     </div>
 
+    <div class="contactContainer">
+        <div class="contactGrid">
+            <!-- Left Side: Personal Info -->
+            <div class="personalInfo">
+                <h2>Personal Info</h2>
+                <p><strong>Email:</strong> johnkenly@example.com</p>
+                <p><strong>Phone:</strong> +63 912 345 6789</p>
+                <p><strong>Address:</strong> Pili, Camarines Sur, Philippines</p>
+            </div>
+
+            <!-- Right Side: Contact Form -->
+            <div class="contactFormWrapper">
+                <h2>Contact Me</h2>
+                <form class="contactForm" action="#" method="POST">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Your Email" required>
+
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Your Message" rows="6" required></textarea>
+
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <footer>
+        <p>Special Credits: AI models and LLMs ❤️</p>
+        <p>Bachelor of Science in Information Technology</p>
+        <p>Camarines Sur Polytechnic Colleges</p>
+    </footer>
+
+
     <script>
         const roles = [
             "a Student",

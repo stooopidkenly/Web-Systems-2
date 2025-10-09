@@ -405,6 +405,151 @@ header {
     background: rgba(255, 255, 255, 0.1);
 }
 
+.contactContainer {
+    max-width: 1100px;
+    margin: 100px auto;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    font-family: "Poppins", sans-serif;
+}
+
+.contactGrid {
+    display: flex;
+    gap: 50px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+/* Left Column */
+.personalInfo {
+    flex: 1;
+    min-width: 250px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 30px;
+    border-radius: 15px;
+    padding-top: 150px;
+}
+
+.personalInfo h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #5555FF, #D455FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.personalInfo p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+/* Right Column */
+.contactFormWrapper {
+    flex: 1;
+    min-width: 300px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 30px;
+    border-radius: 15px;
+}
+
+.contactFormWrapper h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #5555FF, #D455FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Contact Form Styles (same as before) */
+.contactForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.contactForm label {
+    text-align: left;
+    font-weight: 500;
+    font-size: 16px;
+    color: #000;
+}
+
+.contactForm input,
+.contactForm textarea {
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.contactForm input:focus,
+.contactForm textarea:focus {
+    box-shadow: 0 0 10px rgba(85, 85, 255, 0.5);
+}
+
+.contactForm button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #5555FF, #D455FF);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.contactForm button:hover {
+    opacity: 0.9;
+}
+
+footer {
+    background: linear-gradient(90deg, #5555FF, #D455FF);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    font-family: "Poppins", sans-serif;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
+}
+
+footer p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+footer p:first-child {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+footer p:last-child {
+    font-style: italic;
+    font-size: 15px;
+}
+
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+    footer {
+        padding: 30px 10px;
+    }
+
+    footer p {
+        font-size: 14px;
+    }
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+    .contactGrid {
+        flex-direction: column;
+    }
+}
+
 
 
 @keyframes fadeSlideUp {
