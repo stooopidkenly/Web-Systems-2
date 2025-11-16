@@ -1,12 +1,21 @@
 <?php
 require "dbConnection.php";
-require "User.php";
-require "Education.php";
+require "classes/User.php";
+require "classes/Education.php";
+require "classes/Skills.php";
+require "classes/Projects.php";
+require "classes/Links.php";
 
 $user = new User($pdo); // create an instance of the User Classfile for fetching user info.
 $educ = new Education($pdo); // create an instance of the User Classfile for fetching the education info.
 $info = $user->showInfo(); // call the showInfo function which returns all the data of the user then show it.
 $educInfo = $educ->showEducation();
+$skills = new Skills($pdo);
+$skillsInfo = $skills->showAllSkills();
+$projects = new Projects($pdo);
+$projectInfo = $projects->showAllProjects();
+$links = new Links($pdo);
+$linkInfo = $links->showAllLinks();
 ?>
 
 <!DOCTYPE html>
@@ -18,6 +27,7 @@ $educInfo = $educ->showEducation();
     <title><?= $info['name'] ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -73,152 +83,49 @@ $educInfo = $educ->showEducation();
         </div>
     </div>
 
-
-    <!-- <div class="education" id="education">
-        <h1 style="color:black;">Education</h1>
-
-
-        <div class="college">
-            <img src="schools/cspc.png" alt="Camarines Sur Polytechnic Colleges" style="width: 100px; height: 100px; object-fit: contain;">
-            <div class="edu-content">
-                <span>College</span>
-                <p>2023-Present</p>
-                <h1>Camarines Sur Polytechnic Colleges</h1>
-                <h1>Bachelor of Science in Information Technology</h1>
-            </div>
-        </div>
-        <div class="shs">
-            <img src="schools/usi.png" alt="Universidad de Sta. Isabel-Pili Campus" style="width: 100px; height: 100px; object-fit: contain;">
-            <div class="edu-content">
-                <span>Senior High School</span>
-                <p>2021-2023</p>
-                <h1>Universidad de Sta. Isabel-Pili Campus</h1>
-                <h1>Science, Technology, Engineering and Mathematics</h1>
-            </div>
-        </div>
-        <div class="jhs">
-            <img src="schools/usi.png" alt="Universidad de Sta. Isabel-Pili Campus" style="width: 100px; height: 100px; object-fit: contain;">
-            <div class="edu-content">
-                <span>Junior High School</span>
-                <p>2017-2021</p>
-                <h1>Universidad de Sta. Isabel-Pili Campus</h1>
-            </div>
-        </div>
-        <div class="elementary">
-            <img src="schools/pcs.png" alt="Pili Central School" style="width: 100px; height: 100px; object-fit: contain;">
-            <div class="edu-content">
-                <span>Elementary</span>
-                <p>2011-2017</p>
-                <h1>Pili Central School</h1>
-            </div>
-        </div>
-    </div> -->
-
-    <div class="skillsContainer" id="skills">
-        <h1 class="skills" style="color:black;">Skills</h1>
-        <div class="skills-grid">
-            <div class="skill">
-                <span>HTML</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 90%;"></div>
+    <h1 style="color:black;" class="skillsTitle">Skills</h1>
+    <div class="skill-card">
+        <?php foreach ($skillsInfo as $skill): ?>
+            <div class="skill-item">
+                <div class="skill-info">
+                    <div class="skill-title">
+                        <?= $skill['skillName'] ?>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: <?= $skill['skillLevel'] ?>%; height:100%"></div>
+                    </div>
                 </div>
-                <span class="percent">90%</span>
-            </div>
-            <div class="skill">
-                <span>CSS</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 85%;"></div>
+                <div class="skill-level-text">
+                    <?= $skill['skillLevel'] ?>%
                 </div>
-                <span class="percent">85%</span>
             </div>
-            <div class="skill">
-                <span>JavaScript</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 70%;"></div>
-                </div>
-                <span class="percent">70%</span>
-            </div>
-            <div class="skill">
-                <span>PHP</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 80%;"></div>
-                </div>
-                <span class="percent">80%</span>
-            </div>
-            <div class="skill">
-                <span>Laravel</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 75%;"></div>
-                </div>
-                <span class="percent">75%</span>
-            </div>
-            <div class="skill">
-                <span>CodeIgniter 4</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 70%;"></div>
-                </div>
-                <span class="percent">70%</span>
-            </div>
-            <div class="skill">
-                <span>SQL</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 85%;"></div>
-                </div>
-                <span class="percent">85%</span>
-            </div>
-            <div class="skill">
-                <span>Figma</span>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 60%;"></div>
-                </div>
-                <span class="percent">60%</span>
-            </div>
-        </div>
+        <?php endforeach; ?>
     </div>
 
     <div class="projectContainer" id="projects">
         <h1 class="projectsTitle" style="color:black;">Projects</h1>
         <div class="projectsGrid">
-            <div class="projectCard">
-                <h2>Deal Or No Deal</h2>
-                <p>A simple game developed for educational purpose.</p>
-                <div class="buttons">
-                    <a href="https://dealornodeal-black.vercel.app/" class="btn demo" target="_blank">Live Demo</a>
-                    <a href="https://github.com/stooopidkenly/Deal-or-No-Deal" class="btn code" target="_blank">View Code</a>
+            <?php foreach ($projectInfo as $project): ?>
+                <div class="projectCard">
+                    <div class="project-image-wrapper">
+                        <img src="<?= $project['image'] ?>" alt="<?= $project['projectName'] ?> Screenshot">
+                        <div class="overlay">
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h2><?= $project['projectName'] ?></h2>
+                        <p><?= $project['description'] ?></p>
+                        <div class="buttons">
+                            <a href="<?= $project['liveDemo'] ?>" class="btn demo" target="_blank">
+                                <i class="fas fa-eye"></i> Live Demo
+                            </a>
+                            <a href="<?= $project['sourceCode'] ?>" class="btn code" target="_blank">
+                                <i class="fas fa-code"></i> View Code
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="projectCard">
-                <h2>SunnyTrips</h2>
-                <p>AI-powered travel booking system that personalizes itineraries and budgets.</p>
-                <div class="buttons">
-                    <a href="#" class="btn demo">Live Demo</a>
-                    <a href="#" class="btn code">View Code</a>
-                </div>
-            </div>
-            <div class="projectCard">
-                <h2>FoodieFinds</h2>
-                <p>Restaurant finder built with CodeIgniter 4 and integrated Google Maps API.</p>
-                <div class="buttons">
-                    <a href="#" class="btn demo">Live Demo</a>
-                    <a href="#" class="btn code">View Code</a>
-                </div>
-            </div>
-            <div class="projectCard">
-                <h2>PortfolioHub</h2>
-                <p>Dynamic portfolio CMS for students to showcase their work online.</p>
-                <div class="buttons">
-                    <a href="#" class="btn demo">Live Demo</a>
-                    <a href="#" class="btn code">View Code</a>
-                </div>
-            </div>
-            <div class="projectCard">
-                <h2>SecureAuth</h2>
-                <p>Login and registration system with rate limiting and password hashing.</p>
-                <div class="buttons">
-                    <a href="#" class="btn demo">Live Demo</a>
-                    <a href="#" class="btn code">View Code</a>
-                </div>
-            </div>
+            <?php endforeach ?>
         </div>
     </div>
 
@@ -226,30 +133,47 @@ $educInfo = $educ->showEducation();
         <div class="contactGrid">
             <div class="personalInfo">
                 <h2>Personal Info</h2>
-                <p><strong>Email:</strong><?= $info['email'] ?></p>
-                <p><strong>Phone:</strong> <?= $info['phoneNum'] ?></p>
-                <p><strong>Address:</strong> <?= $info['address'] ?></p>
-                <p><strong><a href="https://github.com/stooopidkenly">Github</a></strong></p>
-                <p><strong><a href="https://www.facebook.com/johnkenly.pamor.13">Facebook</a></strong></p>
-                <p><strong><a href="https://www.instagram.com/heykenlyp_/">Instagram</a></strong></p>
+                <div class="contactItem">
+                    <i class="fas fa-envelope"></i>
+                    <p><strong>Email:</strong> <a href="mailto:<?= $info['email'] ?>"><?= $info['email'] ?></a></p>
+                </div>
+                <div class="contactItem">
+                    <i class="fas fa-phone"></i>
+                    <p><strong>Phone:</strong> <a href="tel:<?= $info['phoneNum'] ?>"><?= $info['phoneNum'] ?></a></p>
+                </div>
+                <div class="contactItem">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p><strong>Address:</strong> <?= $info['address'] ?></p>
+                </div>
+                <div class="socialLinks">
+                    <?php foreach ($linkInfo as $link): ?>
+                        <a href="<?= $link['link'] ?>" target="_blank" aria-label="<?= $link['platform'] ?> Profile">
+                            <!-- Example: Use Font Awesome for social icons, dynamically -->
+                            <i class="fab fa-<?= strtolower(str_replace(' ', '-', $link['platform'])) ?>"></i>
+                        </a>
+                    <?php endforeach ?>
+                </div>
             </div>
             <div class="contactFormWrapper">
                 <h2>Contact Me</h2>
-                <form class="contactForm" action="#" method="POST">
+                <form class="contactForm" action="process_contact.php" method="POST">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" placeholder="Your Name" required>
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="Your Email" required>
                     <label for="message">Message</label>
                     <textarea id="message" name="message" placeholder="Your Message" rows="6" required></textarea>
+                    <!-- Honeypot field (hidden by CSS) -->
+                    <input type="text" name="trap" style="display:none; visibility:hidden; opacity:0; position:absolute; left:-9999px;">
                     <button type="submit">Send Message</button>
+                    <div id="form-messages" aria-live="polite"></div> <!-- For success/error messages -->
                 </form>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>© 2025 John Kenly Pamor. All rights reserved.</p>
+        <p>© 2025 <?= $info['name'] ?>. All rights reserved.</p>
     </footer>
 
     <script>
