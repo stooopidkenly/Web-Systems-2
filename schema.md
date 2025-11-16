@@ -1,3 +1,5 @@
+CREATE DATABASE portfolio;
+
 CREATE TABLE admin (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
@@ -24,6 +26,35 @@ CREATE TABLE education (
     end_year VARCHAR(20),
     program VARCHAR(255)
 );
+
+CREATE TABLE skills (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    skillName VARCHAR(100) NOT NULL,
+    skillLevel TINYINT UNSIGNED NOT NULL,
+);
+
+CREATE TABLE projects (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    projectName VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    liveDemo VARCHAR(255),
+    sourceCode VARCHAR(255),
+    image VARCHAR(255)
+);
+
+CREATE TABLE links (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    platform VARCHAR(100) NOT NULL,
+    link VARCHAR(255) NOT NULL
+);
+
+INSERT INTO links (platform, link)
+VALUES
+('Facebook', 'https://facebook.com/yourprofile'),
+('Instagram', 'https://instagram.com/yourprofile'),
+('GitHub', 'https://github.com/yourprofile'),
+('LinkedIn', 'https://linkedin.com/in/yourprofile');
+
 
 INSERT INTO users (id, name, email, description, address, phoneNum)
 VALUES 
@@ -78,6 +109,37 @@ VALUES
     NULL
 );
 
+INSERT INTO skills (skillName, skillLevel) VALUES
+('HTML', 90),
+('CSS', 30),
+('Javascript', 10),
+('PHP', 90),
+('Laravel', 90),
+('CodeIgniter4', 70),
+('SQL', 90),
+('FIGMA', 50);
 
-
+INSERT INTO projects (projectName, description, liveDemo, sourceCode, image)
+VALUES
+(
+    'Portfolio Website',
+    'A personal portfolio showcasing my skills, education, and projects.',
+    'https://your-demo-link.com',
+    'https://github.com/yourgithub/portfolio',
+    'projects/portfolio.png'
+),
+(
+    'Simple CRUD System',
+    'A CRUD application built using PHP and MySQL with authentication.',
+    'https://your-crud-demo.com',
+    'https://github.com/yourgithub/crud-system',
+    'projects/crud.png'
+),
+(
+    'Task Manager App',
+    'A basic task manager with add, update, delete, and mark-done features.',
+    'https://your-task-demo.com',
+    'https://github.com/yourgithub/task-manager',
+    'projects/task.png'
+);
 
