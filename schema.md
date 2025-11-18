@@ -48,6 +48,11 @@ CREATE TABLE links (
     link VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE titles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL
+);
+
 INSERT INTO links (platform, link)
 VALUES
 ('Facebook', 'https://facebook.com/yourprofile'),

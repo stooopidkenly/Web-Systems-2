@@ -16,6 +16,11 @@ $projects = new Projects($pdo);
 $projectInfo = $projects->showAllProjects();
 $links = new Links($pdo);
 $linkInfo = $links->showAllLinks();
+
+$sql = "SELECT title FROM titles";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
 <!DOCTYPE html>
@@ -224,6 +229,8 @@ $linkInfo = $links->showAllLinks();
                     currentContainer.remove();
                 }
 
+                this.element.innerHTML = "";
+
                 const newContainer = this.createTextElement(this.texts[index]);
                 this.element.appendChild(newContainer);
                 await this.animateIn(newContainer);
@@ -232,14 +239,20 @@ $linkInfo = $links->showAllLinks();
             }
 
             next() {
-                this.currentIndex = (this.currentIndex + 1) % this.texts.length;
+                let nextIndex = this.currentIndex + 1;
+
+                if (nextIndex >= this.texts.length) {
+                    nextIndex = 0; // reset properly
+                }
+
+                this.currentIndex = nextIndex;
                 this.showText(this.currentIndex);
             }
 
-            start() {
-                this.showText(this.currentIndex);
-                this.intervalId = setInterval(() => this.next(), this.rotationInterval);
-            }
+            // start() {
+            //     this.showText(this.currentIndex);
+            //     this.intervalId = setInterval(() => this.next(), this.rotationInterval);
+            // }
 
             stop() {
                 if (this.intervalId) {
@@ -248,27 +261,26 @@ $linkInfo = $links->showAllLinks();
             }
 
             init() {
-                const srOnly = document.createElement('span');
-                srOnly.className = 'text-rotate-sr-only';
-                srOnly.textContent = this.texts[this.currentIndex];
-                this.element.appendChild(srOnly);
+                // const srOnly = document.createElement('span');
+                // srOnly.className = 'text-rotate-sr-only';
+                // srOnly.textContent = this.texts[this.currentIndex];
+                // this.element.appendChild(srOnly);
+                //this.start();
 
-                this.start();
+                // Show the first text ONE TIME ONLY
+                this.showText(this.currentIndex);
+
+                // Start the loop
+                this.intervalId = setInterval(() => this.next(), this.rotationInterval);
             }
         }
 
         // Initialize the rotating text
+        const dynamicTitles = <?php echo json_encode($titles); ?>;
         const rotatingTextElement = document.getElementById('rotatingText');
         const rotatingText = new RotatingText(rotatingTextElement, {
-            texts: [
-                'a Student',
-                'an Aspiring Web Developer',
-                'an Aspiring Software Engineer',
-                'an Aspiring UI/UX Designer',
-                'a Problem Solver',
-                'a cutie pie :)'
-            ],
-            rotationInterval: 1000
+            texts: dynamicTitles,
+            rotationInterval: 1500
         });
     </script>
 </body>
