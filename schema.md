@@ -53,6 +53,23 @@ CREATE TABLE titles (
     title VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE certs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    certs VARCHAR(255) NOT NULL
+)
+
+INSERT INTO certs (id, certs) VALUES
+(
+    1,
+    'certs/E Cert BYCIT.png'
+),
+(
+    2,
+    'certs/BY.png'
+)
+    
+
+
 INSERT INTO links (platform, link)
 VALUES
 ('Facebook', 'https://facebook.com/yourprofile'),
