@@ -29,15 +29,16 @@ class AdminAuth
     //logout
     public function logout()
     {
+        session_unset();
         session_destroy();
-        header('Location: index.php');
+        header("Location: index.php");
         exit();
     }
 
     public function requireLogin()
     {
-        if (!isset($_SESSION['isLoggedIn'])) {
-            header('Location: index.php');
+        if (!isset($_SESSION['isLoggedIn']) || $_SESSION['isLoggedIn'] !== true) {
+            header('Location: login.php');
             exit();
         }
     }

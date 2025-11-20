@@ -12,6 +12,7 @@ CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     email VARCHAR (100) NOT NULL,
+    photo VARCHAR(255)not null,
     address VARCHAR(255),
     phoneNum VARCHAR(20),
     description TEXT
@@ -55,17 +56,20 @@ CREATE TABLE titles (
 
 CREATE TABLE certs (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    certs VARCHAR(255) NOT NULL
+    certs VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL
 )
 
-INSERT INTO certs (id, certs) VALUES
+INSERT INTO certs (id, certs, name) VALUES
 (
     1,
-    'certs/E Cert BYCIT.png'
+    'certs/E Cert BYCIT.png',
+    '12th Bicol Youth Congress in Information Technology'
 ),
 (
     2,
-    'certs/BY.png'
+    'certs/BY.png',
+    '13th Bicol Youth Congress in Information Technology'
 )
     
 
@@ -78,12 +82,13 @@ VALUES
 ('LinkedIn', 'https://linkedin.com/in/yourprofile');
 
 
-INSERT INTO users (id, name, email, description, address, phoneNum)
+INSERT INTO users (id, name, email, photo, description, address, phoneNum)
 VALUES 
 (
     1,
     'John Kenly Pamor',
     'johnkenlypamor13@gmail.com',
+    'profile.JPG',
     'Hi! I''m John Kenly Pamor, an aspiring Software Engineer and Web Developer dedicated to solving complex problems with clean, efficient code. Currently, I''m a college student pursuing Bachelor of Science in Information Technology at Camarines Sur Polytechnic Colleges. My technical focus is on backend development, specifically mastering PHP(Laravel and Codeigniter4) and SQL. I''m committed to continuous learning and invite you to look through my portfolio projects to see my skills in action.',
     'Pili, Camarines Sur, Philippines',
     '+649123456789'

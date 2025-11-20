@@ -1,6 +1,7 @@
 <?php
-require "dbConnection.php";
-require "AdminAuth.php";
+require_once "../path.php";
+require_once CLASS_PATH . "/AdminAuth.php";
+require_once BASE_PATH . "/dbConnection.php";
 
 $auth = new AdminAuth($pdo);
 $auth->requireLogin();

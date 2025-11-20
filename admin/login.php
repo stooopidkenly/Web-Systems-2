@@ -1,6 +1,8 @@
 <?php
-require "dbConnection.php";
-require "AdminAuth.php";
+
+require_once "../path.php";
+require_once CLASS_PATH . "/AdminAuth.php";
+require_once BASE_PATH . "/dbConnection.php";
 
 $nameErr = "";
 $passErr = "";
@@ -24,12 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // pag wala error -> login credentials checking -> tawag sa AdminAuth class login method
     if (empty($nameErr) && empty($passErr)) {
+
         if ($auth->login($username, $password)) {
             header("Location: adminDashboard.php");
             exit();
+        } else {
+            $loginErr = "Invalid username or password";
         }
-    } else {
-        $loginErr = "Account Credentials Not Found. Try Again";
     }
 }
 ?>
@@ -123,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="login-error"><?php echo $loginErr; ?></p>
         <?php endif; ?>
 
-        <form action="" method="POST">
+        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
             <div class="input-group">
                 <label>Username</label>
                 <input type="text" name="username" value="">

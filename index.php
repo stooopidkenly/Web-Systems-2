@@ -1,5 +1,6 @@
 <?php
-require "dbConnection.php";
+require_once "path.php";
+require_once "dbConnection.php";
 require "classes/User.php";
 require "classes/Education.php";
 require "classes/Skills.php";
@@ -16,6 +17,7 @@ $projects = new Projects($pdo);
 $projectInfo = $projects->showAllProjects();
 $links = new Links($pdo);
 $linkInfo = $links->showAllLinks();
+$certInfo = $links->showCert();
 
 $sql = "SELECT title FROM titles";
 $stmt = $pdo->prepare($sql);
@@ -63,7 +65,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <h1 style="color: black;">About Me</h1>
         <div class="info">
             <p><?= $info['description'] ?></p>
-            <img src="profile.JPG" class="profile" id="profile" alt="John Kenly Pamor">
+            <img src="<?= $info['photo'] ?>" class="profile" id="profile" alt="<?= $info['name'] ?>">
         </div>
     </div>
 
@@ -88,7 +90,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         </div>
     </div>
 
-    <h1 style="color:black;" class="skillsTitle">Skills</h1>
+    <h1 style="color:black;" class="skillsTitle" id="skills">Skills</h1>
     <div class="skill-card">
         <?php foreach ($skillsInfo as $skill): ?>
             <div class="skill-item">
@@ -133,6 +135,27 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
             <?php endforeach ?>
         </div>
     </div>
+
+    <div class="cert-section">
+        <h1 class="cert-title">Certifications</h1>
+        <div class="cert-grid">
+            <?php foreach ($certInfo as $cert): ?>
+                <div class="cert-card">
+                    <img
+                        src="<?php echo $cert['certs']; ?>"
+                        class="cert-img"
+                        alt="<?php echo $cert['name']; ?> Logo"
+                        onclick="openCert('<?php echo $cert['certs']; ?>')">
+                    <h3 class="cert-name"><?php echo $cert['name']; ?></h3>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div id="certModal" class="cert-modal" onclick="closeCert()">
+        <img id="certModalImg" class="cert-modal-img">
+    </div>
+
 
     <div class="contactContainer">
         <div class="contactGrid">
@@ -179,6 +202,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     <footer>
         <p>© 2025 <?= $info['name'] ?>. All rights reserved.</p>
+        <!-- <p>Made with ❤️</p> -->
     </footer>
 
     <script>
@@ -249,11 +273,6 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 this.showText(this.currentIndex);
             }
 
-            // start() {
-            //     this.showText(this.currentIndex);
-            //     this.intervalId = setInterval(() => this.next(), this.rotationInterval);
-            // }
-
             stop() {
                 if (this.intervalId) {
                     clearInterval(this.intervalId);
@@ -261,16 +280,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
             }
 
             init() {
-                // const srOnly = document.createElement('span');
-                // srOnly.className = 'text-rotate-sr-only';
-                // srOnly.textContent = this.texts[this.currentIndex];
-                // this.element.appendChild(srOnly);
-                //this.start();
-
-                // Show the first text ONE TIME ONLY
                 this.showText(this.currentIndex);
-
-                // Start the loop
                 this.intervalId = setInterval(() => this.next(), this.rotationInterval);
             }
         }
@@ -282,6 +292,15 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
             texts: dynamicTitles,
             rotationInterval: 1500
         });
+
+        function openCert(src) {
+            document.getElementById("certModalImg").src = src;
+            document.getElementById("certModal").style.display = "flex";
+        }
+
+        function closeCert() {
+            document.getElementById("certModal").style.display = "none";
+        }
     </script>
 </body>
 
