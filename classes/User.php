@@ -18,17 +18,22 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function update($id, $name, $email, $address, $phoneNum, $description, $photo = null)
+    public function update($id, $name, $email, $address, $phoneNum, $description, $photo)
     {
-        if ($photo) {
-            $sql = "UPDATE users SET name=?, email=?, address=?, phoneNum=?, description=?, photo=? WHERE id=?";
-            $params = [$name, $email, $address, $phoneNum, $description, $photo, $id];
-        } else {
-            $sql = "UPDATE users SET name=?, email=?, address=?, phoneNum=?, description=? WHERE id=?";
-            $params = [$name, $email, $address, $phoneNum, $description, $id];
-        }
+        $sql = "UPDATE users SET 
+            name = ?, 
+            email = ?, 
+            address = ?, 
+            phoneNum = ?, 
+            description = ?, 
+            photo = ? 
+            WHERE id = ?";
+
+        $params = [$name, $email, $address, $phoneNum, $description, $photo, $id];
 
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute($params);
+        $result = $stmt->execute($params);
+
+        return $result;
     }
 }

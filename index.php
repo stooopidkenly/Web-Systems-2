@@ -56,7 +56,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     <main class="bodyContainer">
         <h1 class="headerTitle">
-            Hi! I am <span class="gradient"><?= $info['name'] ?></span><br>
+            Hi! I am <span class="gradient" id="name"><?= $info['name'] ?></span><br>
             <span class="text-rotate" id="rotatingText"></span>
         </h1>
     </main>
@@ -64,7 +64,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <div class="about" id="about">
         <h1 style="color: black;">About Me</h1>
         <div class="info">
-            <p><?= $info['description'] ?></p>
+            <p id="description"><?= $info['description'] ?></p>
             <img src="<?= $info['photo'] ?>" class="profile" id="profile" alt="<?= $info['name'] ?>">
         </div>
     </div>
@@ -75,15 +75,15 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
             <?php foreach ($educInfo as $edu): ?>
                 <div class="edu-card">
                     <div class="edu-card-header">
-                        <img src="<?php echo $edu['logo']; ?>" class="edu-logo" alt="<?php echo $edu['schoolName']; ?> Logo">
-                        <h3><?php echo $edu['schoolName']; ?></h3>
+                        <img id="logo" src="<?php echo $edu['logo']; ?>" class="edu-logo" alt="<?php echo $edu['schoolName']; ?> Logo">
+                        <h3 id="schoolName"><?php echo $edu['schoolName']; ?></h3>
                     </div>
                     <div class="edu-card-body">
-                        <h2><?php echo $edu['level']; ?></h2>
+                        <h2 id="level"><?php echo $edu['level']; ?></h2>
                         <?php if (!empty($edu['program'])): ?>
-                            <p class="program"><?php echo $edu['program']; ?></p>
+                            <p id="program" class="program"><?php echo $edu['program']; ?></p>
                         <?php endif; ?>
-                        <p class="years"><?php echo $edu['start_year'] . " - " . $edu['end_year']; ?></p>
+                        <p class="years" id="years"><?php echo $edu['start_year'] . " - " . $edu['end_year']; ?></p>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -163,16 +163,17 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 <h2>Personal Info</h2>
                 <div class="contactItem">
                     <i class="fas fa-envelope"></i>
-                    <p><strong>Email:</strong> <a href="mailto:<?= $info['email'] ?>"><?= $info['email'] ?></a></p>
+                    <p><strong>Email:</strong> <a id="email" href="mailto:<?= $info['email'] ?>"><?= $info['email'] ?></a></p>
                 </div>
                 <div class="contactItem">
                     <i class="fas fa-phone"></i>
-                    <p><strong>Phone:</strong> <a href="tel:<?= $info['phoneNum'] ?>"><?= $info['phoneNum'] ?></a></p>
+                    <p><strong>Phone:</strong> <a id="phoneNum" href="tel:<?= $info['phoneNum'] ?>"><?= $info['phoneNum'] ?></a></p>
                 </div>
                 <div class="contactItem">
                     <i class="fas fa-map-marker-alt"></i>
-                    <p><strong>Address:</strong> <?= $info['address'] ?></p>
+                    <p id="address"><strong>Address:</strong> <?= $info['address'] ?></p>
                 </div>
+
                 <div class="socialLinks">
                     <?php foreach ($linkInfo as $link): ?>
                         <a href="<?= $link['link'] ?>" target="_blank" aria-label="<?= $link['platform'] ?> Profile">

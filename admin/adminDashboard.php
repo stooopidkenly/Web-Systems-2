@@ -12,9 +12,6 @@ require "../classes/Links.php";
 $auth = new AdminAuth($pdo);
 $auth->requireLogin();
 
-$changed = $_SESSION['changed'] ?? '';
-unset($_SESSION['changed']);
-
 $user = new User($pdo); // create an instance of the User Classfile for fetching user info.
 $info = $user->showInfo(); // call the showInfo function which returns all the data of the user then show it.
 
@@ -22,6 +19,9 @@ $sql = "SELECT title FROM titles";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+$educ = new Education($pdo); // create an instance of the User Classfile for fetching the education info.
+$educInfo = $educ->showEducation();
 
 ?>
 <!DOCTYPE html>
@@ -197,12 +197,38 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
             color: white;
             border: none;
         }
+
+        .update-menu {
+            margin-top: 10px;
+            margin-left: 11.5%;
+        }
+
+        .modal-content {
+            pointer-events: auto;
+        }
+
+        .modal {
+            pointer-events: auto;
+        }
     </style>
 </head>
 
 <body>
 
     <h1>Admin Dashboard</h1>
+    <h2>Current User Info (Live Preview)</h2>
+
+    <div style="margin-bottom: 20px;">
+        <p><strong>Name:</strong> <span class="user-name"><?= $info['name'] ?></span></p>
+        <p><strong>Email:</strong> <span class="user-email"><?= $info['email'] ?></span></p>
+        <p><strong>Address:</strong> <span class="user-address"><?= $info['address'] ?></span></p>
+        <p><strong>Phone:</strong> <span class="user-phone"><?= $info['phoneNum'] ?></span></p>
+        <p><strong>Description:</strong> <span class="user-description"><?= $info['description'] ?></span></p>
+
+        <!-- ADD THIS IF YOU WANT TO UPDATE PROFILE IMAGE -->
+        <img class="user-photo" src="../<?= $info['photo'] ?>" width="120">
+    </div>
+
 
     <a href="../logout.php" style="color: red;">Logout</a>
 
@@ -229,9 +255,14 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         </div>
     </div>
 
-    <?php if ($changed): ?>
+    <?php if (!empty($_GET['passwordChanged'])): ?>
         <script>
-            alert("<?php echo addslashes($changed); ?>");
+            alert("Password Changed Successfully");
+            if (window.history.replaceState) {
+                const url = new URL(window.location);
+                url.searchParams.delete("passwordChanged");
+                window.history.replaceState({}, document.title, url);
+            }
         </script>
     <?php endif; ?>
 
@@ -240,7 +271,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <!-- ================================================================== -->
     <h3>Manage Content</h3>
     <div class="dashboard-menu">
-        <button class="menu-btn" onclick="openModal('modal-user')">Add User Info</button>
+        <button class="menu-btn" onclick="openModal('modal-user')">Update User Info</button>
         <button class="menu-btn" onclick="openModal('modal-education')">Add Education</button>
         <button class="menu-btn" onclick="openModal('modal-skills')">Add Skills</button>
         <button class="menu-btn" onclick="openModal('modal-projects')">Add Projects</button>
@@ -248,6 +279,16 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <button class="menu-btn" onclick="openModal('modal-titles')">Add Titles</button>
         <button class="menu-btn" onclick="openModal('modal-certs')">Add Certifications</button>
     </div>
+
+    <div class="dashboard-menu">
+        <button class="menu-btn" onclick="openModal('delete-education')">Delete Education Info</button>
+        <button class="menu-btn" onclick="openModal('modal-skills')">Add Skills</button>
+        <button class="menu-btn" onclick="openModal('modal-projects')">Add Projects</button>
+        <button class="menu-btn" onclick="openModal('modal-links')">Add Links</button>
+        <button class="menu-btn" onclick="openModal('modal-titles')">Add Titles</button>
+        <button class="menu-btn" onclick="openModal('modal-certs')">Add Certifications</button>
+    </div>
+
 
 
     <!-- ================================================================== -->
@@ -258,7 +299,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <div id="modal-user" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-user')">&times;</span>
-            <h2>Add User Info</h2>
+            <h2>Update User Information</h2>
             <form id="updateForm" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?= $info['id']; ?>">
                 <label>Name</label>
@@ -280,17 +321,22 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 <label>Profile Photo</label>
                 <input type="file" name="photo">
 
-                <button type="submit">Save User</button>
+                <button type="submit">Update</button>
             </form>
         </div>
     </div>
 
-    <!-- 2. EDUCATION MODAL -->
     <div id="modal-education" class="modal">
         <div class="modal-content">
+
+            <!-- ✔️ Close button should be here -->
             <span class="close-btn" onclick="closeModal('modal-education')">&times;</span>
-            <h2>Add Education</h2>
-            <form action="actions/addEducation.php" method="POST" enctype="multipart/form-data">
+
+            <h2>Add Education Information</h2>
+
+            <!-- ✔️ Form starts AFTER the close button -->
+            <form id="educationForm" enctype="multipart/form-data">
+
                 <label>Level</label>
                 <input type="text" name="level" required>
 
@@ -307,12 +353,43 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 <input type="text" name="end_year" required>
 
                 <label>Program</label>
-                <input type="text" name="program" required>
+                <input type="text" name="program">
 
-                <button type="submit">Save Education</button>
+                <button type="submit">Add</button>
             </form>
         </div>
     </div>
+
+    <div id="delete-education" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('delete-education')">&times;</span>
+            <h2>Delete Education Information</h2>
+            <table id="eduTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>School Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($educInfo as $edu): ?>
+                        <tr data-id="<?= $edu['id'] ?>">
+                            <td><?= $edu['level'] ?></td>
+                            <td><?= $edu['schoolName'] ?></td>
+                            <td>
+                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
 
     <!-- 3. SKILLS MODAL -->
     <div id="modal-skills" class="modal">
@@ -413,7 +490,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         // Function to open a specific modal
         function openModal(modalId) {
             var modal = document.getElementById(modalId);
-            modal.style.display = "flex"; // Use flex to center
+            modal.style.display = "flex";
         }
 
         // Function to close a specific modal
@@ -422,12 +499,14 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
             modal.style.display = "none";
         }
 
-        // Close modal if user clicks outside the content area
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = "none";
-            }
-        }
+        document.querySelectorAll(".modal").forEach(modal => {
+            modal.addEventListener("click", function(e) {
+                if (e.target.classList.contains("modal")) {
+                    e.target.style.display = "none";
+                }
+            });
+        });
+
 
         const modal = document.getElementById("changePassModal");
         const openBtn = document.getElementById("openModalBtn");
@@ -436,31 +515,105 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         openBtn.onclick = () => modal.style.display = "flex";
         closeBtn.onclick = () => modal.style.display = "none";
 
-        window.onclick = (e) => {
-            if (e.target === modal) modal.style.display = "none";
-        };
+        // UPDATE USER INFORMATION
+        document.getElementById('updateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            fetch('actions/updateUser.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.status === "success") {
+                        document.querySelector('.user-name').textContent = data.updated.name;
+                        document.querySelector('.user-email').textContent = data.updated.email;
+                        document.querySelector('.user-address').textContent = data.updated.address;
+                        document.querySelector('.user-phone').textContent = data.updated.phoneNum;
+                        document.querySelector('.user-description').textContent = data.updated.description;
 
-        document.getElementById("updateForm").addEventListener("submit", function(e) {
+                        // Force image reload with cache-busting
+                        if (document.querySelector('.user-photo')) {
+                            document.querySelector('.user-photo').src = "../" + data.updated.photo + "?t=" + new Date().getTime();
+                        }
+
+                        closeModal('modal-user');
+
+                        // Optional: Show success message
+                        alert("Successfully updated!");
+                        window.open('../index.php', '_blank');
+                    } else {
+                        alert("Error Updating User Information");
+                    }
+                })
+                .catch(err => console.error("AJAX ERROR:", err));
+        });
+
+
+        //ADD EDUCATION INFORMATION
+        document.getElementById('educationForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             let formData = new FormData(this);
 
-            fetch("actions/updateUser.php", {
-                    method: "POST",
-                    body: formData
+            fetch('actions/addEducation.php', {
+                    method: 'POST',
+                    body: formData,
                 })
-                .then(res => res.text())
+                .then(res => res.json())
                 .then(data => {
-                    alert(data);
-                    // OPTIONAL: automatically close modal
-                    closeModal('modal-user');
-                    // OPTIONAL: reload displayed values without full page reload
-                    location.reload();
+                    if (data.status === "success") {
+                        document.getElementById('educationForm').reset();
+                        alert(data.message);
+                        closeModal('modal-education');
+                    } else {
+                        alert("Education Information Added Successful");
+                    }
                 })
-                .catch(err => console.log(err));
+                .catch(err => console.error("AJAX ERROR: ", err));
         });
-    </script>
 
+        function attachDeleteEvents() {
+            document.querySelectorAll('#eduTable .btn-delete').forEach(btn => {
+                if (!btn.dataset.listener) { // avoid double binding
+                    btn.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        const modalRow = this.closest('tr');
+
+                        if (!confirm("Are you sure you want to delete this record?")) return;
+
+                        const formData = new FormData();
+                        formData.append('edu_id', id);
+
+                        fetch('actions/deleteEducation.php', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(res => res.json()) // ✅ CALL FUNCTION
+                            .then(data => {
+                                if (data.status === "success") {
+                                    modalRow.remove();
+
+                                    const indexRow = document.getElementById('edu-row-' + id);
+                                    if (indexRow) indexRow.remove();
+
+                                    alert(data.message);
+                                } else {
+                                    alert("Error: " + data.message);
+                                }
+                            })
+                            .catch(err => console.error("AJAX ERROR:", err));
+                    });
+
+                    btn.dataset.listener = true; // mark as bound
+                }
+            });
+        }
+
+        // Call this on page load and after adding new rows
+        attachDeleteEvents();
+    </script>
 </body>
 
 </html>
