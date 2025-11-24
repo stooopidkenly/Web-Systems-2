@@ -17,8 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if ($auth->changePassword($pass)) {
-        $_SESSION['changed'] = "Password Changed Successfully";
-        header("Location: adminDashboard.php");
+        header("Location: adminDashboard.php?passwordChanged=1");
         exit();
     } else {
         echo "Failed to update password.";

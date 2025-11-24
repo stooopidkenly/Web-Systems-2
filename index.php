@@ -56,7 +56,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     <main class="bodyContainer">
         <h1 class="headerTitle">
-            Hi! I am <span class="gradient"><?= $info['name'] ?></span><br>
+            Hi! I am <span class="gradient" id="name"><?= $info['name'] ?></span><br>
             <span class="text-rotate" id="rotatingText"></span>
         </h1>
     </main>
@@ -64,7 +64,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <div class="about" id="about">
         <h1 style="color: black;">About Me</h1>
         <div class="info">
-            <p><?= $info['description'] ?></p>
+            <p id="description"><?= $info['description'] ?></p>
             <img src="<?= $info['photo'] ?>" class="profile" id="profile" alt="<?= $info['name'] ?>">
         </div>
     </div>
@@ -73,25 +73,26 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <h1 style="color:black;" class="educTitle">Education</h1>
         <div class="education-grid">
             <?php foreach ($educInfo as $edu): ?>
-                <div class="edu-card">
+                <div class="edu-card" data-id="<?= $edu['id'] ?>">
                     <div class="edu-card-header">
-                        <img src="<?php echo $edu['logo']; ?>" class="edu-logo" alt="<?php echo $edu['schoolName']; ?> Logo">
-                        <h3><?php echo $edu['schoolName']; ?></h3>
+                        <img id="logo" src="<?php echo $edu['logo']; ?>" class="edu-logo" alt="<?php echo $edu['schoolName']; ?> Logo">
+                        <h3 id="schoolName"><?php echo $edu['schoolName']; ?></h3>
                     </div>
                     <div class="edu-card-body">
-                        <h2><?php echo $edu['level']; ?></h2>
+                        <h2 id="level"><?php echo $edu['level']; ?></h2>
                         <?php if (!empty($edu['program'])): ?>
-                            <p class="program"><?php echo $edu['program']; ?></p>
+                            <p id="program" class="program"><?php echo $edu['program']; ?></p>
                         <?php endif; ?>
-                        <p class="years"><?php echo $edu['start_year'] . " - " . $edu['end_year']; ?></p>
+                        <p class="years" id="years"><?php echo $edu['start_year'] . " - " . $edu['end_year']; ?></p>
                     </div>
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
 
+
     <h1 style="color:black;" class="skillsTitle" id="skills">Skills</h1>
-    <div class="skill-card">
+    <div class="skill-card" id="skillsContainer">
         <?php foreach ($skillsInfo as $skill): ?>
             <div class="skill-item">
                 <div class="skill-info">
@@ -163,16 +164,17 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 <h2>Personal Info</h2>
                 <div class="contactItem">
                     <i class="fas fa-envelope"></i>
-                    <p><strong>Email:</strong> <a href="mailto:<?= $info['email'] ?>"><?= $info['email'] ?></a></p>
+                    <p><strong>Email:</strong> <a id="email" href="mailto:<?= $info['email'] ?>"><?= $info['email'] ?></a></p>
                 </div>
                 <div class="contactItem">
                     <i class="fas fa-phone"></i>
-                    <p><strong>Phone:</strong> <a href="tel:<?= $info['phoneNum'] ?>"><?= $info['phoneNum'] ?></a></p>
+                    <p><strong>Phone:</strong> <a id="phoneNum" href="tel:<?= $info['phoneNum'] ?>"><?= $info['phoneNum'] ?></a></p>
                 </div>
                 <div class="contactItem">
                     <i class="fas fa-map-marker-alt"></i>
-                    <p><strong>Address:</strong> <?= $info['address'] ?></p>
+                    <p id="address"><strong>Address:</strong> <?= $info['address'] ?></p>
                 </div>
+
                 <div class="socialLinks">
                     <?php foreach ($linkInfo as $link): ?>
                         <a href="<?= $link['link'] ?>" target="_blank" aria-label="<?= $link['platform'] ?> Profile">
@@ -205,86 +207,11 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <!-- <p>Made with ❤️</p> -->
     </footer>
 
+    <script src="js/rotatingText.js"></script>
+    <script src="js/openCloseCert.js"></script>
+    <script src="js/updateUserChannel.js"></script>
+
     <script>
-        class RotatingText {
-            constructor(element, options = {}) {
-                this.element = element;
-                this.texts = options.texts || [];
-                this.rotationInterval = options.rotationInterval || 3000;
-                this.currentIndex = 0;
-                this.isAnimating = false;
-
-                this.init();
-            }
-
-            createTextElement(text) {
-                const container = document.createElement('span');
-                container.className = 'text-rotate-container';
-
-                const textSpan = document.createElement('span');
-                textSpan.className = 'text-rotate-text';
-                textSpan.textContent = text;
-
-                container.appendChild(textSpan);
-                return container;
-            }
-
-            async animateIn(container) {
-                const textElement = container.querySelector('.text-rotate-text');
-                textElement.classList.add('animate-in');
-                await new Promise(resolve => setTimeout(resolve, 600));
-            }
-
-            async animateOut(container) {
-                const textElement = container.querySelector('.text-rotate-text');
-                textElement.classList.remove('animate-in');
-                textElement.classList.add('animate-out');
-                await new Promise(resolve => setTimeout(resolve, 400));
-            }
-
-            async showText(index) {
-                if (this.isAnimating) return;
-                this.isAnimating = true;
-
-                const currentContainer = this.element.querySelector('.text-rotate-container');
-
-                if (currentContainer) {
-                    await this.animateOut(currentContainer);
-                    currentContainer.remove();
-                }
-
-                this.element.innerHTML = "";
-
-                const newContainer = this.createTextElement(this.texts[index]);
-                this.element.appendChild(newContainer);
-                await this.animateIn(newContainer);
-
-                this.isAnimating = false;
-            }
-
-            next() {
-                let nextIndex = this.currentIndex + 1;
-
-                if (nextIndex >= this.texts.length) {
-                    nextIndex = 0; // reset properly
-                }
-
-                this.currentIndex = nextIndex;
-                this.showText(this.currentIndex);
-            }
-
-            stop() {
-                if (this.intervalId) {
-                    clearInterval(this.intervalId);
-                }
-            }
-
-            init() {
-                this.showText(this.currentIndex);
-                this.intervalId = setInterval(() => this.next(), this.rotationInterval);
-            }
-        }
-
         // Initialize the rotating text
         const dynamicTitles = <?php echo json_encode($titles); ?>;
         const rotatingTextElement = document.getElementById('rotatingText');
@@ -292,16 +219,10 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
             texts: dynamicTitles,
             rotationInterval: 1500
         });
-
-        function openCert(src) {
-            document.getElementById("certModalImg").src = src;
-            document.getElementById("certModal").style.display = "flex";
-        }
-
-        function closeCert() {
-            document.getElementById("certModal").style.display = "none";
-        }
     </script>
+
+    <script src="js/refreshEducation.js"></script>
+    <script src="js/skillsChannel.js"></script>
 </body>
 
 </html>

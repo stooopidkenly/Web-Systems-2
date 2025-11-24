@@ -12,9 +12,6 @@ require "../classes/Links.php";
 $auth = new AdminAuth($pdo);
 $auth->requireLogin();
 
-$changed = $_SESSION['changed'] ?? '';
-unset($_SESSION['changed']);
-
 $user = new User($pdo); // create an instance of the User Classfile for fetching user info.
 $info = $user->showInfo(); // call the showInfo function which returns all the data of the user then show it.
 
@@ -22,6 +19,9 @@ $sql = "SELECT title FROM titles";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+$educ = new Education($pdo); // create an instance of the User Classfile for fetching the education info.
+$educInfo = $educ->showEducation();
 
 ?>
 <!DOCTYPE html>
@@ -31,178 +31,24 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-
-    <style>
-        body {
-            font-family: sans-serif;
-            padding: 20px;
-        }
-
-        .dashboard-menu {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .menu-btn {
-            padding: 20px 30px;
-            font-size: 18px;
-            cursor: pointer;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
-
-        .menu-btn:hover {
-            background-color: #0056b3;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            /* Hidden by default */
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            /* Enable scroll if needed */
-            background-color: rgba(0, 0, 0, 0.5);
-            /* Black w/ opacity */
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 50px;
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 25px;
-            border: 1px solid #888;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            /* Restrict width for better look */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: relative;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Close Button (X) */
-        .close-btn {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            position: absolute;
-            right: 15px;
-            top: 5px;
-        }
-
-        .close-btn:hover,
-        .close-btn:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Form Styles inside Modal */
-        form label {
-            font-weight: bold;
-            display: block;
-            margin-top: 10px;
-        }
-
-        form input[type="text"],
-        form input[type="email"],
-        form input[type="number"],
-        form textarea {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            box-sizing: border-box;
-            /* Ensures padding doesn't widen element */
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        form button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        form button:hover {
-            background-color: #218838;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-changepass {
-            width: 300px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        .closeBtn {
-            float: right;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .modal-content input {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 8px;
-        }
-
-        .saveBtn {
-            width: 100%;
-            padding: 8px;
-            background: #007bff;
-            color: white;
-            border: none;
-        }
-    </style>
+    <link href="styles.css" rel="stylesheet">
 </head>
 
 <body>
 
     <h1>Admin Dashboard</h1>
+    <h2>Current User Info (Live Preview)</h2>
+
+    <div style="margin-bottom: 20px;">
+        <p><strong>Name:</strong> <span class="user-name"><?= $info['name'] ?></span></p>
+        <p><strong>Email:</strong> <span class="user-email"><?= $info['email'] ?></span></p>
+        <p><strong>Address:</strong> <span class="user-address"><?= $info['address'] ?></span></p>
+        <p><strong>Phone:</strong> <span class="user-phone"><?= $info['phoneNum'] ?></span></p>
+        <p><strong>Description:</strong> <span class="user-description"><?= $info['description'] ?></span></p>
+
+        <img class="user-photo" src="../<?= $info['photo'] ?>" width="120">
+    </div>
+
 
     <a href="../logout.php" style="color: red;">Logout</a>
 
@@ -229,9 +75,14 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         </div>
     </div>
 
-    <?php if ($changed): ?>
+    <?php if (!empty($_GET['passwordChanged'])): ?>
         <script>
-            alert("<?php echo addslashes($changed); ?>");
+            alert("Password Changed Successfully");
+            if (window.history.replaceState) {
+                const url = new URL(window.location);
+                url.searchParams.delete("passwordChanged");
+                window.history.replaceState({}, document.title, url);
+            }
         </script>
     <?php endif; ?>
 
@@ -240,15 +91,24 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <!-- ================================================================== -->
     <h3>Manage Content</h3>
     <div class="dashboard-menu">
-        <button class="menu-btn" onclick="openModal('modal-user')">Add User Info</button>
+        <button class="menu-btn" onclick="openModal('modal-user')">Update User Info</button>
         <button class="menu-btn" onclick="openModal('modal-education')">Add Education</button>
         <button class="menu-btn" onclick="openModal('modal-skills')">Add Skills</button>
         <button class="menu-btn" onclick="openModal('modal-projects')">Add Projects</button>
-        <button class="menu-btn" onclick="openModal('modal-links')">Add Links</button>
+        <button class="menu-btn" onclick="openModal('modal-links')">Update Links</button>
         <button class="menu-btn" onclick="openModal('modal-titles')">Add Titles</button>
         <button class="menu-btn" onclick="openModal('modal-certs')">Add Certifications</button>
     </div>
 
+    <div class="dashboard-menu">
+        <button class="menu-btn"> <a href="skillsView.php">Update Skills</a></button>
+        <button class="menu-btn" onclick="openModal('delete-education')">Delete Education Info</button>
+        <button class="menu-btn" onclick="openModal('delete-skill')">Delete Skills</button>
+        <button class="menu-btn" onclick="openModal('delete-projects')">Delete Projects</button>
+        <button class="menu-btn" onclick="openModal('delete-links')">Delete Links</button>
+        <button class="menu-btn" onclick="openModal('delete-titles')">Delete Titles</button>
+        <button class="menu-btn" onclick="openModal('delete-certs')">Delete Certifications</button>
+    </div>
 
     <!-- ================================================================== -->
     <!-- MODALS -->
@@ -258,7 +118,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <div id="modal-user" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-user')">&times;</span>
-            <h2>Add User Info</h2>
+            <h2>Update User Information</h2>
             <form id="updateForm" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?= $info['id']; ?>">
                 <label>Name</label>
@@ -280,17 +140,22 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 <label>Profile Photo</label>
                 <input type="file" name="photo">
 
-                <button type="submit">Save User</button>
+                <button type="submit">Update</button>
             </form>
         </div>
     </div>
 
-    <!-- 2. EDUCATION MODAL -->
     <div id="modal-education" class="modal">
         <div class="modal-content">
+
+            <!-- ✔️ Close button should be here -->
             <span class="close-btn" onclick="closeModal('modal-education')">&times;</span>
-            <h2>Add Education</h2>
-            <form action="actions/addEducation.php" method="POST" enctype="multipart/form-data">
+
+            <h2>Add Education Information</h2>
+
+            <!-- ✔️ Form starts AFTER the close button -->
+            <form id="educationForm" enctype="multipart/form-data">
+
                 <label>Level</label>
                 <input type="text" name="level" required>
 
@@ -307,10 +172,178 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 <input type="text" name="end_year" required>
 
                 <label>Program</label>
-                <input type="text" name="program" required>
+                <input type="text" name="program">
 
-                <button type="submit">Save Education</button>
+                <button type="submit">Add</button>
             </form>
+        </div>
+    </div>
+
+    <!-- DELETE EDUCATION -->
+    <div id="delete-education" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('delete-education')">&times;</span>
+            <h2>Delete Education Information</h2>
+            <table id="eduTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>School Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($educInfo as $edu): ?>
+                        <tr data-id="<?= $edu['id'] ?>">
+                            <td><?= $edu['level'] ?></td>
+                            <td><?= $edu['schoolName'] ?></td>
+                            <td>
+                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- DELETE SKILL -->
+    <div id="delete-skill" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('delete-skill')">&times;</span>
+            <h2>Delete Skill Display</h2>
+            <!-- <table id="eduTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>School Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($educInfo as $edu): ?>
+                        <tr data-id="<?= $edu['id'] ?>">
+                            <td><?= $edu['level'] ?></td>
+                            <td><?= $edu['schoolName'] ?></td>
+                            <td>
+                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table> -->
+        </div>
+    </div>
+
+    <!-- DELETE PROJECTS -->
+    <div id="delete-projects" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('delete-projects')">&times;</span>
+            <h2>Delete Project Display</h2>
+            <!-- <table id="eduTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>School Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($educInfo as $edu): ?>
+                        <tr data-id="<?= $edu['id'] ?>">
+                            <td><?= $edu['level'] ?></td>
+                            <td><?= $edu['schoolName'] ?></td>
+                            <td>
+                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table> -->
+        </div>
+    </div>
+
+    <!-- DELETE LINKS -->
+    <div id="delete-links" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('delete-links')">&times;</span>
+            <h2>Delete Links Display</h2>
+            <!-- <table id="eduTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>School Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($educInfo as $edu): ?>
+                        <tr data-id="<?= $edu['id'] ?>">
+                            <td><?= $edu['level'] ?></td>
+                            <td><?= $edu['schoolName'] ?></td>
+                            <td>
+                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table> -->
+        </div>
+    </div>
+
+    <!-- DELETE TITLES -->
+    <div id="delete-titles" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('delete-titles')">&times;</span>
+            <h2>Delete Title Display</h2>
+            <!-- <table id="eduTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>School Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($educInfo as $edu): ?>
+                        <tr data-id="<?= $edu['id'] ?>">
+                            <td><?= $edu['level'] ?></td>
+                            <td><?= $edu['schoolName'] ?></td>
+                            <td>
+                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table> -->
+        </div>
+    </div>
+
+    <!-- DELETE CERTIFICATIONS -->
+    <div id="delete-certs" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('delete-certs')">&times;</span>
+            <h2>Delete Certification Display</h2>
+            <!-- <table id="eduTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>School Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($educInfo as $edu): ?>
+                        <tr data-id="<?= $edu['id'] ?>">
+                            <td><?= $edu['level'] ?></td>
+                            <td><?= $edu['schoolName'] ?></td>
+                            <td>
+                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table> -->
         </div>
     </div>
 
@@ -319,7 +352,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-skills')">&times;</span>
             <h2>Add Skill</h2>
-            <form action="actions/addSkill.php" method="POST">
+            <form id="skillsForm">
                 <label>Skill Name</label>
                 <input type="text" name="skillName" required>
 
@@ -405,61 +438,11 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         </div>
     </div>
 
-
-    <!-- ================================================================== -->
-    <!-- JAVASCRIPT FOR MODALS -->
-    <!-- ================================================================== -->
-    <script>
-        // Function to open a specific modal
-        function openModal(modalId) {
-            var modal = document.getElementById(modalId);
-            modal.style.display = "flex"; // Use flex to center
-        }
-
-        // Function to close a specific modal
-        function closeModal(modalId) {
-            var modal = document.getElementById(modalId);
-            modal.style.display = "none";
-        }
-
-        // Close modal if user clicks outside the content area
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = "none";
-            }
-        }
-
-        const modal = document.getElementById("changePassModal");
-        const openBtn = document.getElementById("openModalBtn");
-        const closeBtn = document.querySelector(".closeBtn");
-
-        openBtn.onclick = () => modal.style.display = "flex";
-        closeBtn.onclick = () => modal.style.display = "none";
-
-        window.onclick = (e) => {
-            if (e.target === modal) modal.style.display = "none";
-        };
-
-        document.getElementById("updateForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            let formData = new FormData(this);
-
-            fetch("actions/updateUser.php", {
-                    method: "POST",
-                    body: formData
-                })
-                .then(res => res.text())
-                .then(data => {
-                    alert(data);
-                    // OPTIONAL: automatically close modal
-                    closeModal('modal-user');
-                    // OPTIONAL: reload displayed values without full page reload
-                    location.reload();
-                })
-                .catch(err => console.log(err));
-        });
-    </script>
+    <!-- JS FILES IMPORTS -->
+    <script src="js/openClose.js"></script> <!-- MODALS -->
+    <script src="js/updateInfo.js"></script> <!-- INFORMATION -->
+    <script src="js/education.js"></script> <!-- EDUCATION -->
+    <script src="js/skills.js"></script> <!-- SKILLS -->
 
 </body>
 
