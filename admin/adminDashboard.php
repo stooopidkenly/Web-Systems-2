@@ -590,7 +590,7 @@ $educInfo = $educ->showEducation();
                                 method: 'POST',
                                 body: formData
                             })
-                            .then(res => res.json()) // ✅ CALL FUNCTION
+                            .then(res => res.json())
                             .then(data => {
                                 if (data.status === "success") {
                                     modalRow.remove();
