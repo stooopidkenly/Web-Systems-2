@@ -101,6 +101,7 @@ $educInfo = $educ->showEducation();
     </div>
 
     <div class="dashboard-menu">
+        <button class="menu-btn"> <a href="skillsView.php">Update Skills</a></button>
         <button class="menu-btn" onclick="openModal('delete-education')">Delete Education Info</button>
         <button class="menu-btn" onclick="openModal('delete-skill')">Delete Skills</button>
         <button class="menu-btn" onclick="openModal('delete-projects')">Delete Projects</button>
@@ -108,8 +109,6 @@ $educInfo = $educ->showEducation();
         <button class="menu-btn" onclick="openModal('delete-titles')">Delete Titles</button>
         <button class="menu-btn" onclick="openModal('delete-certs')">Delete Certifications</button>
     </div>
-
-
 
     <!-- ================================================================== -->
     <!-- MODALS -->
@@ -353,7 +352,7 @@ $educInfo = $educ->showEducation();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-skills')">&times;</span>
             <h2>Add Skill</h2>
-            <form action="actions/addSkill.php" method="POST">
+            <form id="skillsForm">
                 <label>Skill Name</label>
                 <input type="text" name="skillName" required>
 
@@ -443,7 +442,7 @@ $educInfo = $educ->showEducation();
     <script src="js/openClose.js"></script> <!-- MODALS -->
     <script src="js/updateInfo.js"></script> <!-- INFORMATION -->
     <script src="js/education.js"></script> <!-- EDUCATION -->
-
+    <script src="js/skills.js"></script> <!-- SKILLS -->
 
 </body>
 

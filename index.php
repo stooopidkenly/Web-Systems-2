@@ -92,7 +92,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
 
     <h1 style="color:black;" class="skillsTitle" id="skills">Skills</h1>
-    <div class="skill-card">
+    <div class="skill-card" id="skillsContainer">
         <?php foreach ($skillsInfo as $skill): ?>
             <div class="skill-item">
                 <div class="skill-info">
@@ -209,7 +209,8 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     <script src="js/rotatingText.js"></script>
     <script src="js/openCloseCert.js"></script>
-    
+    <script src="js/updateUserChannel.js"></script>
+
     <script>
         // Initialize the rotating text
         const dynamicTitles = <?php echo json_encode($titles); ?>;
@@ -218,26 +219,10 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
             texts: dynamicTitles,
             rotationInterval: 1500
         });
-
-        const channel = new BroadcastChannel("user_updates");
-
-        channel.onmessage = function(e) {
-            const user = e.data;
-
-            document.getElementById("name").textContent = user.name;
-            document.getElementById("email").textContent = user.email;
-            document.getElementById("address").textContent = user.address;
-            document.getElementById("phoneNum").textContent = user.phoneNum;
-            document.getElementById("description").textContent = user.description;
-
-            const photoEl = document.getElementById("profile");
-            if (photoEl && user.photo) {
-                photoEl.src = user.photo + "?t=" + Date.now();
-            }
-        };
     </script>
 
     <script src="js/refreshEducation.js"></script>
+    <script src="js/skillsChannel.js"></script>
 </body>
 
 </html>
