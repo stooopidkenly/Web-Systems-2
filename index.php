@@ -73,7 +73,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <h1 style="color:black;" class="educTitle">Education</h1>
         <div class="education-grid">
             <?php foreach ($educInfo as $edu): ?>
-                <div class="edu-card">
+                <div class="edu-card" data-id="<?= $edu['id'] ?>">
                     <div class="edu-card-header">
                         <img id="logo" src="<?php echo $edu['logo']; ?>" class="edu-logo" alt="<?php echo $edu['schoolName']; ?> Logo">
                         <h3 id="schoolName"><?php echo $edu['schoolName']; ?></h3>
@@ -89,6 +89,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
             <?php endforeach; ?>
         </div>
     </div>
+
 
     <h1 style="color:black;" class="skillsTitle" id="skills">Skills</h1>
     <div class="skill-card">
@@ -206,86 +207,10 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <!-- <p>Made with ❤️</p> -->
     </footer>
 
+    <script src="js/rotatingText.js"></script>
+    <script src="js/openCloseCert.js"></script>
+    
     <script>
-        class RotatingText {
-            constructor(element, options = {}) {
-                this.element = element;
-                this.texts = options.texts || [];
-                this.rotationInterval = options.rotationInterval || 3000;
-                this.currentIndex = 0;
-                this.isAnimating = false;
-
-                this.init();
-            }
-
-            createTextElement(text) {
-                const container = document.createElement('span');
-                container.className = 'text-rotate-container';
-
-                const textSpan = document.createElement('span');
-                textSpan.className = 'text-rotate-text';
-                textSpan.textContent = text;
-
-                container.appendChild(textSpan);
-                return container;
-            }
-
-            async animateIn(container) {
-                const textElement = container.querySelector('.text-rotate-text');
-                textElement.classList.add('animate-in');
-                await new Promise(resolve => setTimeout(resolve, 600));
-            }
-
-            async animateOut(container) {
-                const textElement = container.querySelector('.text-rotate-text');
-                textElement.classList.remove('animate-in');
-                textElement.classList.add('animate-out');
-                await new Promise(resolve => setTimeout(resolve, 400));
-            }
-
-            async showText(index) {
-                if (this.isAnimating) return;
-                this.isAnimating = true;
-
-                const currentContainer = this.element.querySelector('.text-rotate-container');
-
-                if (currentContainer) {
-                    await this.animateOut(currentContainer);
-                    currentContainer.remove();
-                }
-
-                this.element.innerHTML = "";
-
-                const newContainer = this.createTextElement(this.texts[index]);
-                this.element.appendChild(newContainer);
-                await this.animateIn(newContainer);
-
-                this.isAnimating = false;
-            }
-
-            next() {
-                let nextIndex = this.currentIndex + 1;
-
-                if (nextIndex >= this.texts.length) {
-                    nextIndex = 0; // reset properly
-                }
-
-                this.currentIndex = nextIndex;
-                this.showText(this.currentIndex);
-            }
-
-            stop() {
-                if (this.intervalId) {
-                    clearInterval(this.intervalId);
-                }
-            }
-
-            init() {
-                this.showText(this.currentIndex);
-                this.intervalId = setInterval(() => this.next(), this.rotationInterval);
-            }
-        }
-
         // Initialize the rotating text
         const dynamicTitles = <?php echo json_encode($titles); ?>;
         const rotatingTextElement = document.getElementById('rotatingText');
@@ -294,15 +219,25 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
             rotationInterval: 1500
         });
 
-        function openCert(src) {
-            document.getElementById("certModalImg").src = src;
-            document.getElementById("certModal").style.display = "flex";
-        }
+        const channel = new BroadcastChannel("user_updates");
 
-        function closeCert() {
-            document.getElementById("certModal").style.display = "none";
-        }
+        channel.onmessage = function(e) {
+            const user = e.data;
+
+            document.getElementById("name").textContent = user.name;
+            document.getElementById("email").textContent = user.email;
+            document.getElementById("address").textContent = user.address;
+            document.getElementById("phoneNum").textContent = user.phoneNum;
+            document.getElementById("description").textContent = user.description;
+
+            const photoEl = document.getElementById("profile");
+            if (photoEl && user.photo) {
+                photoEl.src = user.photo + "?t=" + Date.now();
+            }
+        };
     </script>
+
+    <script src="js/refreshEducation.js"></script>
 </body>
 
 </html>

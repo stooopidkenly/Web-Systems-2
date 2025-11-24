@@ -10,13 +10,12 @@ class User
 
     public function showInfo()
     {
-
-        $sql = "SELECT * FROM users WHERE id = 1";
+        $sql = "SELECT * FROM users LIMIT 1";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
-
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
 
     public function update($id, $name, $email, $address, $phoneNum, $description, $photo)
     {

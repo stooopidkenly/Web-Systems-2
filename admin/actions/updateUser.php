@@ -28,17 +28,26 @@ try {
     $currentPhoto = $info ? $info['photo'] : null;
 
     $newPhotoPath = $currentPhoto;
-    if (!empty($_FILES['photo']['name'])) {
+
+    if (
+        isset($_FILES['photo']) &&
+        isset($_FILES['photo']['tmp_name']) &&
+        is_uploaded_file($_FILES['photo']['tmp_name'])
+    ) {
         $targetDir = "../../uploads/";
+
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0777, true);
         }
+
         $fileName = time() . "_" . basename($_FILES['photo']['name']);
         $targetFile = $targetDir . $fileName;
+
         if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
             $newPhotoPath = "uploads/" . $fileName;
         }
     }
+
     // Use the User class method
     $user->update($id, $name, $email, $address, $phoneNum, $description, $newPhotoPath);
 
