@@ -94,18 +94,14 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <h1 style="color:black;" class="skillsTitle" id="skills">Skills</h1>
     <div class="skill-card" id="skillsContainer">
         <?php foreach ($skillsInfo as $skill): ?>
-            <div class="skill-item">
+            <div class="skill-item" data-id="<?= $skill['id'] ?>">
                 <div class="skill-info">
-                    <div class="skill-title">
-                        <?= $skill['skillName'] ?>
-                    </div>
+                    <div class="skill-title"><?= $skill['skillName'] ?></div>
                     <div class="progress">
-                        <div class="progress-bar" style="width: <?= $skill['skillLevel'] ?>%; height:100%"></div>
+                        <div class="progress-bar" style="width: <?= $skill['skillLevel'] ?>%"></div>
                     </div>
                 </div>
-                <div class="skill-level-text">
-                    <?= $skill['skillLevel'] ?>%
-                </div>
+                <div class="skill-level-text"><?= $skill['skillLevel'] ?>%</div>
             </div>
         <?php endforeach; ?>
     </div>
@@ -221,7 +217,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         });
     </script>
 
-    <script src="js/refreshEducation.js"></script>
+    <script src="js/educationChannel.js"></script>
     <script src="js/skillsChannel.js"></script>
 </body>
 

@@ -40,7 +40,6 @@
                             description: document.querySelector("textarea[name='description']").value,
                             photo: document.getElementById("currentPhoto")?.src || ""
                         });
-                        // window.open('../index.php', '_blank');
                     } else {
                         alert("Error Updating User Information");
                     }

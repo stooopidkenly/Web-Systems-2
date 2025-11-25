@@ -1,5 +1,8 @@
-const skillsForm = document.getElementById('skillsForm');
+const channel1 = new BroadcastChannel('skills');
+const channel2 = new BroadcastChannel('updatedSkills');
+const channel3 = new BroadcastChannel('deletedSkills'); 
 
+const skillsForm = document.getElementById('skillsForm');
 if (skillsForm) {
     skillsForm.addEventListener('submit', function(e){
         e.preventDefault();
@@ -16,8 +19,6 @@ if (skillsForm) {
                 skillsForm.reset();
                 alert(data.message);
                 closeModal('modal-skills');
-
-                const channel1 = new BroadcastChannel('skills');
                 channel1.postMessage({
                     action: 'add',
                     skill: data.data
@@ -65,15 +66,23 @@ document.getElementById('updateSkillForm').addEventListener('submit', function(e
     .then(data => {
         if(data.status === "success"){
 
-            alert(data.message);
+            const row = document.querySelector(`tr[data-id="${data.data.id}"]`);
+            if (row) {
+                row.dataset.name = data.data.skillName;
+                row.dataset.level = data.data.skillLevel;
+                
+                row.cells[0].textContent = data.data.skillName;  // Skill Name column
+                row.cells[1].textContent = data.data.skillLevel; // Skill Level column
+            }
 
-            // USE THE GLOBAL channel2
+            alert(data.message);
             channel2.postMessage({
                 action: 'update',
                 skill: data.data
             });
         }
     });
+     document.getElementById('updateSkillModal').style.display = 'none';
 });
 
 
@@ -96,16 +105,18 @@ document.addEventListener('click', function(e){
         .then(res => res.json())
         .then(data => {
             if(data.status === "success"){
-
-                // ✅ Broadcast DELETE
-                const channel = new BroadcastChannel('skills');
-                channel.postMessage({
+                alert(data.message);
+                           
+                row.remove();
+                
+                channel3.postMessage({
                     action: 'delete',
                     id: id
                 });
-
-                row.remove();
+            } else {
+                alert(data.message || 'Failed to delete skill');
             }
-        });
+        })
+        .catch(err => console.log("DELETE ERROR:", err));
     }
 });

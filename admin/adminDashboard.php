@@ -103,7 +103,6 @@ $educInfo = $educ->showEducation();
     <div class="dashboard-menu">
         <button class="menu-btn"> <a href="skillsView.php">Update Skills</a></button>
         <button class="menu-btn" onclick="openModal('delete-education')">Delete Education Info</button>
-        <button class="menu-btn" onclick="openModal('delete-skill')">Delete Skills</button>
         <button class="menu-btn" onclick="openModal('delete-projects')">Delete Projects</button>
         <button class="menu-btn" onclick="openModal('delete-links')">Delete Links</button>
         <button class="menu-btn" onclick="openModal('delete-titles')">Delete Titles</button>
@@ -204,34 +203,6 @@ $educInfo = $educ->showEducation();
                     <?php endforeach ?>
                 </tbody>
             </table>
-        </div>
-    </div>
-
-    <!-- DELETE SKILL -->
-    <div id="delete-skill" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('delete-skill')">&times;</span>
-            <h2>Delete Skill Display</h2>
-            <!-- <table id="eduTable" border="1">
-                <thead>
-                    <tr>
-                        <th>Level</th>
-                        <th>School Name</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($educInfo as $edu): ?>
-                        <tr data-id="<?= $edu['id'] ?>">
-                            <td><?= $edu['level'] ?></td>
-                            <td><?= $edu['schoolName'] ?></td>
-                            <td>
-                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table> -->
         </div>
     </div>
 
