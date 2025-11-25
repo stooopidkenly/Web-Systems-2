@@ -110,7 +110,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <h1 class="projectsTitle" style="color:black;">Projects</h1>
         <div class="projectsGrid">
             <?php foreach ($projectInfo as $project): ?>
-                <div class="projectCard">
+                <div class="projectCard" data-id="<?= $project['id'] ?>">
                     <div class="project-image-wrapper">
                         <img src="<?= $project['image'] ?>" alt="<?= $project['projectName'] ?> Screenshot">
                         <div class="overlay">
@@ -137,7 +137,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <h1 class="cert-title">Certifications</h1>
         <div class="cert-grid">
             <?php foreach ($certInfo as $cert): ?>
-                <div class="cert-card">
+                <div class="cert-card" data-id="<?php echo $cert['id']; ?>">
                     <img
                         src="<?php echo $cert['certs']; ?>"
                         class="cert-img"
@@ -219,6 +219,8 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     <script src="js/educationChannel.js"></script>
     <script src="js/skillsChannel.js"></script>
+    <script src="js/projectChannel.js"></script>
+    <script src="js/certsChannel.js"></script>
 </body>
 
 </html>

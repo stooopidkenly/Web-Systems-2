@@ -23,6 +23,13 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 $educ = new Education($pdo); // create an instance of the User Classfile for fetching the education info.
 $educInfo = $educ->showEducation();
 
+
+$project = new Projects($pdo);
+$projectInfo = $project->showAllProjects();
+
+$links = new Links($pdo);
+$certInfo = $links->showCert();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -211,26 +218,24 @@ $educInfo = $educ->showEducation();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('delete-projects')">&times;</span>
             <h2>Delete Project Display</h2>
-            <!-- <table id="eduTable" border="1">
+            <table id="eduTable" border="1">
                 <thead>
                     <tr>
-                        <th>Level</th>
-                        <th>School Name</th>
+                        <th>Project Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($educInfo as $edu): ?>
-                        <tr data-id="<?= $edu['id'] ?>">
-                            <td><?= $edu['level'] ?></td>
-                            <td><?= $edu['schoolName'] ?></td>
+                    <?php foreach ($projectInfo as $project): ?>
+                        <tr data-id="<?= $project['id'] ?>">
+                            <td><?= $project['projectName'] ?></td>
                             <td>
-                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                                <button class="btn-delete-project" data-id="<?= $project['id'] ?>">Delete</button>
                             </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
-            </table> -->
+            </table>
         </div>
     </div>
 
@@ -295,28 +300,29 @@ $educInfo = $educ->showEducation();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('delete-certs')">&times;</span>
             <h2>Delete Certification Display</h2>
-            <!-- <table id="eduTable" border="1">
+
+            <table border="1">
                 <thead>
                     <tr>
-                        <th>Level</th>
-                        <th>School Name</th>
+                        <th>Certification</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($educInfo as $edu): ?>
-                        <tr data-id="<?= $edu['id'] ?>">
-                            <td><?= $edu['level'] ?></td>
-                            <td><?= $edu['schoolName'] ?></td>
+                    <?php foreach ($certInfo as $cert): ?>
+                        <tr data-id="<?= $cert['id'] ?>">
+                            <td><?= $cert['name'] ?></td>
                             <td>
-                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                                <button class="btn-delete-cert" data-id="<?= $cert['id'] ?>">Delete</button>
                             </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
-            </table> -->
+            </table>
+
         </div>
     </div>
+
 
     <!-- 3. SKILLS MODAL -->
     <div id="modal-skills" class="modal">
@@ -340,7 +346,7 @@ $educInfo = $educ->showEducation();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-projects')">&times;</span>
             <h2>Add Project</h2>
-            <form action="actions/addProject.php" method="POST" enctype="multipart/form-data">
+            <form id="projectForm" enctype="multipart/form-data">
                 <label>Project Name</label>
                 <input type="text" name="projectName" required>
 
@@ -397,12 +403,12 @@ $educInfo = $educ->showEducation();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-certs')">&times;</span>
             <h2>Add Certification</h2>
-            <form action="actions/addCert.php" method="POST" enctype="multipart/form-data">
+            <form id="certForm" enctype="multipart/form-data">
                 <label>Certification Image</label>
-                <input type="file" name="certs" required>
+                <input type="file" name="image" required>
 
                 <label>Certification Name</label>
-                <input type="text" name="name" required>
+                <input type="text" name="projectName" required>
 
                 <button type="submit">Save Certification</button>
             </form>
@@ -414,6 +420,8 @@ $educInfo = $educ->showEducation();
     <script src="js/updateInfo.js"></script> <!-- INFORMATION -->
     <script src="js/education.js"></script> <!-- EDUCATION -->
     <script src="js/skills.js"></script> <!-- SKILLS -->
+    <script src="js/projects.js"></script> <!-- Projects -->
+    <script src="js/cert.js"></script>
 
 </body>
 

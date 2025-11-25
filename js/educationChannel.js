@@ -1,6 +1,6 @@
 const eduChannel = new BroadcastChannel('portfolio_edu');
 
-eduChannel.onmessage = function(e) {
+eduChannel.onmessage = function (e) {
     const msg = e.data;
 
     if (msg.action === 'delete' && msg.id) {
@@ -8,7 +8,7 @@ eduChannel.onmessage = function(e) {
         if (eduCard) {
             eduCard.remove();
         }
-    
+
         const row = document.querySelector(`#eduTable tr[data-id="${msg.id}"]`);
         if (row) {
             row.remove();

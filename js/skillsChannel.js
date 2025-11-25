@@ -1,9 +1,9 @@
 const channel1 = new BroadcastChannel('skills');
 const channel2 = new BroadcastChannel('updatedSkills');
-const channel3 = new BroadcastChannel('deletedSkills'); 
+const channel3 = new BroadcastChannel('deletedSkills');
 
 // ADD
-channel1.onmessage = function(e) {
+channel1.onmessage = function (e) {
     const msg = e.data;
 
     if (msg.action === 'add' && msg.skill) {
@@ -27,7 +27,7 @@ channel1.onmessage = function(e) {
 }
 
 //update
-channel2.onmessage = function(e) {
+channel2.onmessage = function (e) {
     const msg = e.data;
 
     if (msg.action === 'update' && msg.skill) {
@@ -49,11 +49,11 @@ channel2.onmessage = function(e) {
 }
 
 // ✅ DELETE
-channel3.onmessage = function(e) {
+channel3.onmessage = function (e) {
     const msg = e.data;
 
     if (msg.action === 'delete' && msg.id) {
-    
+
         const container = document.getElementById('skillsContainer');
         if (container) {
             const card = container.querySelector(`.skill-item[data-id="${msg.id}"]`);
@@ -61,7 +61,7 @@ channel3.onmessage = function(e) {
                 card.remove();
             }
         }
-        
+
         const row = document.querySelector(`tr[data-id="${msg.id}"]`);
         if (row) {
             row.remove();
