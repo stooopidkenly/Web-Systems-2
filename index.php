@@ -173,12 +173,15 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
                 <div class="socialLinks">
                     <?php foreach ($linkInfo as $link): ?>
-                        <a href="<?= $link['link'] ?>" target="_blank" aria-label="<?= $link['platform'] ?> Profile">
-                            <!-- Example: Use Font Awesome for social icons, dynamically -->
+                        <a href="<?= $link['link'] ?>"
+                            target="_blank"
+                            data-id="<?= $link['id'] ?>"
+                            aria-label="<?= $link['platform'] ?> Profile">
                             <i class="fab fa-<?= strtolower(str_replace(' ', '-', $link['platform'])) ?>"></i>
                         </a>
                     <?php endforeach ?>
                 </div>
+
             </div>
             <div class="contactFormWrapper">
                 <h2>Contact Me</h2>
@@ -221,6 +224,8 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <script src="js/skillsChannel.js"></script>
     <script src="js/projectChannel.js"></script>
     <script src="js/certsChannel.js"></script>
+    <script src="js/linksChannel.js"></script>
+    <script src="js/titleChannel.js"></script>
 </body>
 
 </html>

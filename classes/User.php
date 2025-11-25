@@ -35,4 +35,18 @@ class User
 
         return $result;
     }
+
+
+    public function addTitle($title)
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO titles(title) VALUES(:title)");
+        $stmt->execute([':title' => $title]);
+        return $this->pdo->lastInsertId();
+    }
+
+    public function deleteTitle($id)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM titles WHERE id = :id");
+        return $stmt->execute([':id' => $id]);
+    }
 }

@@ -75,4 +75,5 @@ class RotatingText {
         this.showText(this.currentIndex);
         this.intervalId = setInterval(() => this.next(), this.rotationInterval);
     }
+
 }

@@ -15,10 +15,10 @@ $auth->requireLogin();
 $user = new User($pdo); // create an instance of the User Classfile for fetching user info.
 $info = $user->showInfo(); // call the showInfo function which returns all the data of the user then show it.
 
-$sql = "SELECT title FROM titles";
+$sql = "SELECT id, title FROM titles";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
-$titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
+$titles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $educ = new Education($pdo); // create an instance of the User Classfile for fetching the education info.
 $educInfo = $educ->showEducation();
@@ -29,6 +29,7 @@ $projectInfo = $project->showAllProjects();
 
 $links = new Links($pdo);
 $certInfo = $links->showCert();
+$linkInfo = $links->showAllLinks();
 
 ?>
 <!DOCTYPE html>
@@ -102,7 +103,7 @@ $certInfo = $links->showCert();
         <button class="menu-btn" onclick="openModal('modal-education')">Add Education</button>
         <button class="menu-btn" onclick="openModal('modal-skills')">Add Skills</button>
         <button class="menu-btn" onclick="openModal('modal-projects')">Add Projects</button>
-        <button class="menu-btn" onclick="openModal('modal-links')">Update Links</button>
+        <button class="menu-btn" onclick="openModal('modal-links')">Add Links</button>
         <button class="menu-btn" onclick="openModal('modal-titles')">Add Titles</button>
         <button class="menu-btn" onclick="openModal('modal-certs')">Add Certifications</button>
     </div>
@@ -244,54 +245,57 @@ $certInfo = $links->showCert();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('delete-links')">&times;</span>
             <h2>Delete Links Display</h2>
-            <!-- <table id="eduTable" border="1">
+
+            <table id="linksTable" border="1">
                 <thead>
                     <tr>
-                        <th>Level</th>
-                        <th>School Name</th>
+                        <th>Platform</th>
+                        <th>Link</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($educInfo as $edu): ?>
-                        <tr data-id="<?= $edu['id'] ?>">
-                            <td><?= $edu['level'] ?></td>
-                            <td><?= $edu['schoolName'] ?></td>
+                    <?php foreach ($linkInfo as $link): ?>
+                        <tr data-id="<?= $link['id'] ?>">
+                            <td><?= $link['platform'] ?></td>
+                            <td><?= $link['link'] ?></td>
                             <td>
-                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                                <button class="btn-delete-link" data-id="<?= $link['id'] ?>">
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
-            </table> -->
+            </table>
         </div>
     </div>
 
-    <!-- DELETE TITLES -->
     <div id="delete-titles" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('delete-titles')">&times;</span>
-            <h2>Delete Title Display</h2>
-            <!-- <table id="eduTable" border="1">
+            <h2>Delete Titles</h2>
+
+            <table id="titlesTable" border="1">
                 <thead>
                     <tr>
-                        <th>Level</th>
-                        <th>School Name</th>
+                        <th>Title</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($educInfo as $edu): ?>
-                        <tr data-id="<?= $edu['id'] ?>">
-                            <td><?= $edu['level'] ?></td>
-                            <td><?= $edu['schoolName'] ?></td>
+                    <?php foreach ($titles as $t): ?>
+                        <tr data-id="<?= $t['id'] ?>">
+                            <td><?= htmlspecialchars($t['title']) ?></td>
                             <td>
-                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                                <button class="btn-delete-title" data-id="<?= $t['id'] ?>">
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
-            </table> -->
+            </table>
         </div>
     </div>
 
@@ -372,7 +376,7 @@ $certInfo = $links->showCert();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-links')">&times;</span>
             <h2>Add Link</h2>
-            <form action="actions/addLink.php" method="POST">
+            <form id="linkForm">
                 <label>Platform</label>
                 <input type="text" name="platform" required>
 
@@ -389,14 +393,14 @@ $certInfo = $links->showCert();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-titles')">&times;</span>
             <h2>Add Title</h2>
-            <form action="actions/addTitle.php" method="POST">
+            <form id="titleForm">
                 <label>Title Text</label>
                 <input type="text" name="title" required>
-
                 <button type="submit">Save Title</button>
             </form>
         </div>
     </div>
+
 
     <!-- 7. CERTIFICATIONS MODAL -->
     <div id="modal-certs" class="modal">
@@ -422,7 +426,8 @@ $certInfo = $links->showCert();
     <script src="js/skills.js"></script> <!-- SKILLS -->
     <script src="js/projects.js"></script> <!-- Projects -->
     <script src="js/cert.js"></script>
-
+    <script src="js/links.js"></script>
+    <script src="js/title.js"></script>
 </body>
 
 </html>

@@ -16,6 +16,24 @@ class Links
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function addLinks($platform, $link)
+    {
+        $sql = "INSERT INTO links(platform, link) VALUES(:platform, :link)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            ':platform' => $platform,
+            ':link' => $link
+        ]);
+
+        return $this->pdo->lastInsertId();
+    }
+
+    public function deleteLinks($id)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM links WHERE id = :id");
+        return $stmt->execute([':id' => $id]);
+    }
+
     public function showCert()
     {
         $sql = "SELECT * FROM certs ORDER BY id asc";
