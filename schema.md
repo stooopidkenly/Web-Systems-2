@@ -1,4 +1,4 @@
-CREATE DATABASE portfolio;
+<!-- CREATE DATABASE portfolio; -->
 
 CREATE TABLE admin (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,7 +31,7 @@ CREATE TABLE education (
 CREATE TABLE skills (
     id INT AUTO_INCREMENT PRIMARY KEY,
     skillName VARCHAR(100) NOT NULL,
-    skillLevel TINYINT UNSIGNED NOT NULL,
+    skillLevel TINYINT UNSIGNED NOT NULL
 );
 
 CREATE TABLE projects (
@@ -70,9 +70,11 @@ INSERT INTO certs (id, certs, name) VALUES
     2,
     'certs/BY.png',
     '13th Bicol Youth Congress in Information Technology'
-)
-    
+);
 
+INSERT INTO admin (username, password) 
+VALUES ('stooopidkenly', '123');
+    
 
 INSERT INTO links (platform, link)
 VALUES
@@ -110,7 +112,7 @@ VALUES
 (
     'Senior High School',
     'Universidad de Sta. Isabel-Pili Campus',
-    'schools/usipili.png',
+    'schools/usi.png',
     '2021',
     '2023',
     'Science, Technology, Engineering and Mathematics'
@@ -120,7 +122,7 @@ VALUES
 (
     'Junior High School',
     'Universidad de Sta. Isabel-Pili Campus',
-    'schools/usipili.png',
+    'schools/usi.png',
     '2017',
     '2021',
     NULL
@@ -130,7 +132,7 @@ VALUES
 (
     'Elementary',
     'Pili Central School',
-    'schools/pili_central.png',
+    'schools/pcs.png',
     '2011',
     '2017',
     NULL

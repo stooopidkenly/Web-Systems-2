@@ -12,3 +12,8 @@ try {
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
 }
+
+// password = PracticePortfolio_123
+
+// f32-preview.awardspace.net
+// 4710914

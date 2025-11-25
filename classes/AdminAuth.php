@@ -12,19 +12,49 @@ class AdminAuth
     //admin login
     public function login($username, $password)
     {
+        // Fetch admin by username
         $sql = "SELECT * FROM admin WHERE username = :username LIMIT 1";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['username' => $username]);
 
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($admin && password_verify($password, $admin['password'])) {
-            $_SESSION['isLoggedIn'] = true;
-            return true;
-        } else {
+        // If user exists
+        if ($admin) {
+
+            // Case 1: password is already hashed
+            if (password_verify($password, $admin['password'])) {
+                $_SESSION['isLoggedIn'] = true;
+                return true;
+            }
+
+            // Case 2: password in database is still plain text
+            if ($password === $admin['password']) {
+
+                // Convert & update hashed password
+                $newHash = password_hash($password, PASSWORD_DEFAULT);
+
+                $update = $this->pdo->prepare(
+                    "UPDATE admin SET password = :hash WHERE id = :id"
+                );
+
+                $update->execute([
+                    'hash' => $newHash,
+                    'id'   => $admin['id']
+                ]);
+
+                $_SESSION['isLoggedIn'] = true;
+                return true;
+            }
+
+            // Wrong password
             return false;
         }
+
+        // No admin found
+        return false;
     }
+
 
     //logout
     public function logout()
