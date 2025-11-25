@@ -94,18 +94,14 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <h1 style="color:black;" class="skillsTitle" id="skills">Skills</h1>
     <div class="skill-card" id="skillsContainer">
         <?php foreach ($skillsInfo as $skill): ?>
-            <div class="skill-item">
+            <div class="skill-item" data-id="<?= $skill['id'] ?>">
                 <div class="skill-info">
-                    <div class="skill-title">
-                        <?= $skill['skillName'] ?>
-                    </div>
+                    <div class="skill-title"><?= $skill['skillName'] ?></div>
                     <div class="progress">
-                        <div class="progress-bar" style="width: <?= $skill['skillLevel'] ?>%; height:100%"></div>
+                        <div class="progress-bar" style="width: <?= $skill['skillLevel'] ?>%"></div>
                     </div>
                 </div>
-                <div class="skill-level-text">
-                    <?= $skill['skillLevel'] ?>%
-                </div>
+                <div class="skill-level-text"><?= $skill['skillLevel'] ?>%</div>
             </div>
         <?php endforeach; ?>
     </div>
@@ -114,7 +110,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <h1 class="projectsTitle" style="color:black;">Projects</h1>
         <div class="projectsGrid">
             <?php foreach ($projectInfo as $project): ?>
-                <div class="projectCard">
+                <div class="projectCard" data-id="<?= $project['id'] ?>">
                     <div class="project-image-wrapper">
                         <img src="<?= $project['image'] ?>" alt="<?= $project['projectName'] ?> Screenshot">
                         <div class="overlay">
@@ -141,7 +137,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <h1 class="cert-title">Certifications</h1>
         <div class="cert-grid">
             <?php foreach ($certInfo as $cert): ?>
-                <div class="cert-card">
+                <div class="cert-card" data-id="<?php echo $cert['id']; ?>">
                     <img
                         src="<?php echo $cert['certs']; ?>"
                         class="cert-img"
@@ -177,12 +173,15 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
                 <div class="socialLinks">
                     <?php foreach ($linkInfo as $link): ?>
-                        <a href="<?= $link['link'] ?>" target="_blank" aria-label="<?= $link['platform'] ?> Profile">
-                            <!-- Example: Use Font Awesome for social icons, dynamically -->
+                        <a href="<?= $link['link'] ?>"
+                            target="_blank"
+                            data-id="<?= $link['id'] ?>"
+                            aria-label="<?= $link['platform'] ?> Profile">
                             <i class="fab fa-<?= strtolower(str_replace(' ', '-', $link['platform'])) ?>"></i>
                         </a>
                     <?php endforeach ?>
                 </div>
+
             </div>
             <div class="contactFormWrapper">
                 <h2>Contact Me</h2>
@@ -221,8 +220,12 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
         });
     </script>
 
-    <script src="js/refreshEducation.js"></script>
+    <script src="js/educationChannel.js"></script>
     <script src="js/skillsChannel.js"></script>
+    <script src="js/projectChannel.js"></script>
+    <script src="js/certsChannel.js"></script>
+    <script src="js/linksChannel.js"></script>
+    <script src="js/titleChannel.js"></script>
 </body>
 
 </html>

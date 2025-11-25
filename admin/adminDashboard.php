@@ -15,13 +15,21 @@ $auth->requireLogin();
 $user = new User($pdo); // create an instance of the User Classfile for fetching user info.
 $info = $user->showInfo(); // call the showInfo function which returns all the data of the user then show it.
 
-$sql = "SELECT title FROM titles";
+$sql = "SELECT id, title FROM titles";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
-$titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
+$titles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $educ = new Education($pdo); // create an instance of the User Classfile for fetching the education info.
 $educInfo = $educ->showEducation();
+
+
+$project = new Projects($pdo);
+$projectInfo = $project->showAllProjects();
+
+$links = new Links($pdo);
+$certInfo = $links->showCert();
+$linkInfo = $links->showAllLinks();
 
 ?>
 <!DOCTYPE html>
@@ -95,7 +103,7 @@ $educInfo = $educ->showEducation();
         <button class="menu-btn" onclick="openModal('modal-education')">Add Education</button>
         <button class="menu-btn" onclick="openModal('modal-skills')">Add Skills</button>
         <button class="menu-btn" onclick="openModal('modal-projects')">Add Projects</button>
-        <button class="menu-btn" onclick="openModal('modal-links')">Update Links</button>
+        <button class="menu-btn" onclick="openModal('modal-links')">Add Links</button>
         <button class="menu-btn" onclick="openModal('modal-titles')">Add Titles</button>
         <button class="menu-btn" onclick="openModal('modal-certs')">Add Certifications</button>
     </div>
@@ -103,7 +111,6 @@ $educInfo = $educ->showEducation();
     <div class="dashboard-menu">
         <button class="menu-btn"> <a href="skillsView.php">Update Skills</a></button>
         <button class="menu-btn" onclick="openModal('delete-education')">Delete Education Info</button>
-        <button class="menu-btn" onclick="openModal('delete-skill')">Delete Skills</button>
         <button class="menu-btn" onclick="openModal('delete-projects')">Delete Projects</button>
         <button class="menu-btn" onclick="openModal('delete-links')">Delete Links</button>
         <button class="menu-btn" onclick="openModal('delete-titles')">Delete Titles</button>
@@ -207,59 +214,29 @@ $educInfo = $educ->showEducation();
         </div>
     </div>
 
-    <!-- DELETE SKILL -->
-    <div id="delete-skill" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('delete-skill')">&times;</span>
-            <h2>Delete Skill Display</h2>
-            <!-- <table id="eduTable" border="1">
-                <thead>
-                    <tr>
-                        <th>Level</th>
-                        <th>School Name</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($educInfo as $edu): ?>
-                        <tr data-id="<?= $edu['id'] ?>">
-                            <td><?= $edu['level'] ?></td>
-                            <td><?= $edu['schoolName'] ?></td>
-                            <td>
-                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
-                            </td>
-                        </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table> -->
-        </div>
-    </div>
-
     <!-- DELETE PROJECTS -->
     <div id="delete-projects" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('delete-projects')">&times;</span>
             <h2>Delete Project Display</h2>
-            <!-- <table id="eduTable" border="1">
+            <table id="eduTable" border="1">
                 <thead>
                     <tr>
-                        <th>Level</th>
-                        <th>School Name</th>
+                        <th>Project Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($educInfo as $edu): ?>
-                        <tr data-id="<?= $edu['id'] ?>">
-                            <td><?= $edu['level'] ?></td>
-                            <td><?= $edu['schoolName'] ?></td>
+                    <?php foreach ($projectInfo as $project): ?>
+                        <tr data-id="<?= $project['id'] ?>">
+                            <td><?= $project['projectName'] ?></td>
                             <td>
-                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                                <button class="btn-delete-project" data-id="<?= $project['id'] ?>">Delete</button>
                             </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
-            </table> -->
+            </table>
         </div>
     </div>
 
@@ -268,54 +245,57 @@ $educInfo = $educ->showEducation();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('delete-links')">&times;</span>
             <h2>Delete Links Display</h2>
-            <!-- <table id="eduTable" border="1">
+
+            <table id="linksTable" border="1">
                 <thead>
                     <tr>
-                        <th>Level</th>
-                        <th>School Name</th>
+                        <th>Platform</th>
+                        <th>Link</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($educInfo as $edu): ?>
-                        <tr data-id="<?= $edu['id'] ?>">
-                            <td><?= $edu['level'] ?></td>
-                            <td><?= $edu['schoolName'] ?></td>
+                    <?php foreach ($linkInfo as $link): ?>
+                        <tr data-id="<?= $link['id'] ?>">
+                            <td><?= $link['platform'] ?></td>
+                            <td><?= $link['link'] ?></td>
                             <td>
-                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                                <button class="btn-delete-link" data-id="<?= $link['id'] ?>">
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
-            </table> -->
+            </table>
         </div>
     </div>
 
-    <!-- DELETE TITLES -->
     <div id="delete-titles" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('delete-titles')">&times;</span>
-            <h2>Delete Title Display</h2>
-            <!-- <table id="eduTable" border="1">
+            <h2>Delete Titles</h2>
+
+            <table id="titlesTable" border="1">
                 <thead>
                     <tr>
-                        <th>Level</th>
-                        <th>School Name</th>
+                        <th>Title</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($educInfo as $edu): ?>
-                        <tr data-id="<?= $edu['id'] ?>">
-                            <td><?= $edu['level'] ?></td>
-                            <td><?= $edu['schoolName'] ?></td>
+                    <?php foreach ($titles as $t): ?>
+                        <tr data-id="<?= $t['id'] ?>">
+                            <td><?= htmlspecialchars($t['title']) ?></td>
                             <td>
-                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                                <button class="btn-delete-title" data-id="<?= $t['id'] ?>">
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
-            </table> -->
+            </table>
         </div>
     </div>
 
@@ -324,28 +304,29 @@ $educInfo = $educ->showEducation();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('delete-certs')">&times;</span>
             <h2>Delete Certification Display</h2>
-            <!-- <table id="eduTable" border="1">
+
+            <table border="1">
                 <thead>
                     <tr>
-                        <th>Level</th>
-                        <th>School Name</th>
+                        <th>Certification</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($educInfo as $edu): ?>
-                        <tr data-id="<?= $edu['id'] ?>">
-                            <td><?= $edu['level'] ?></td>
-                            <td><?= $edu['schoolName'] ?></td>
+                    <?php foreach ($certInfo as $cert): ?>
+                        <tr data-id="<?= $cert['id'] ?>">
+                            <td><?= $cert['name'] ?></td>
                             <td>
-                                <button class="btn-delete" data-id="<?= $edu['id'] ?>">Delete</button>
+                                <button class="btn-delete-cert" data-id="<?= $cert['id'] ?>">Delete</button>
                             </td>
                         </tr>
                     <?php endforeach ?>
                 </tbody>
-            </table> -->
+            </table>
+
         </div>
     </div>
+
 
     <!-- 3. SKILLS MODAL -->
     <div id="modal-skills" class="modal">
@@ -369,7 +350,7 @@ $educInfo = $educ->showEducation();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-projects')">&times;</span>
             <h2>Add Project</h2>
-            <form action="actions/addProject.php" method="POST" enctype="multipart/form-data">
+            <form id="projectForm" enctype="multipart/form-data">
                 <label>Project Name</label>
                 <input type="text" name="projectName" required>
 
@@ -395,7 +376,7 @@ $educInfo = $educ->showEducation();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-links')">&times;</span>
             <h2>Add Link</h2>
-            <form action="actions/addLink.php" method="POST">
+            <form id="linkForm">
                 <label>Platform</label>
                 <input type="text" name="platform" required>
 
@@ -412,26 +393,26 @@ $educInfo = $educ->showEducation();
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-titles')">&times;</span>
             <h2>Add Title</h2>
-            <form action="actions/addTitle.php" method="POST">
+            <form id="titleForm">
                 <label>Title Text</label>
                 <input type="text" name="title" required>
-
                 <button type="submit">Save Title</button>
             </form>
         </div>
     </div>
+
 
     <!-- 7. CERTIFICATIONS MODAL -->
     <div id="modal-certs" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('modal-certs')">&times;</span>
             <h2>Add Certification</h2>
-            <form action="actions/addCert.php" method="POST" enctype="multipart/form-data">
+            <form id="certForm" enctype="multipart/form-data">
                 <label>Certification Image</label>
-                <input type="file" name="certs" required>
+                <input type="file" name="image" required>
 
                 <label>Certification Name</label>
-                <input type="text" name="name" required>
+                <input type="text" name="projectName" required>
 
                 <button type="submit">Save Certification</button>
             </form>
@@ -443,7 +424,10 @@ $educInfo = $educ->showEducation();
     <script src="js/updateInfo.js"></script> <!-- INFORMATION -->
     <script src="js/education.js"></script> <!-- EDUCATION -->
     <script src="js/skills.js"></script> <!-- SKILLS -->
-
+    <script src="js/projects.js"></script> <!-- Projects -->
+    <script src="js/cert.js"></script>
+    <script src="js/links.js"></script>
+    <script src="js/title.js"></script>
 </body>
 
 </html>

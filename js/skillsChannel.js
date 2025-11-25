@@ -1,8 +1,9 @@
 const channel1 = new BroadcastChannel('skills');
 const channel2 = new BroadcastChannel('updatedSkills');
+const channel3 = new BroadcastChannel('deletedSkills');
 
 // ADD
-channel1.onmessage = function(e) {
+channel1.onmessage = function (e) {
     const msg = e.data;
 
     if (msg.action === 'add' && msg.skill) {
@@ -25,24 +26,45 @@ channel1.onmessage = function(e) {
     }
 }
 
-// UPDATE
-channel2.onmessage = function(e) {
+//update
+channel2.onmessage = function (e) {
     const msg = e.data;
 
     if (msg.action === 'update' && msg.skill) {
-        const updatedSkill = msg.skill;
+
         const container = document.getElementById('skillsContainer');
         if (!container) return;
 
-        const skillCards = container.querySelectorAll('.skill-item');
+        const card = container.querySelector(`.skill-item[data-id="${msg.skill.id}"]`);
 
-        skillCards.forEach(card => {
-            const skillTitleEl = card.querySelector('.skill-title');
+        if (!card) {
+            console.log("CARD NOT FOUND FOR ID:", msg.skill.id);
+            return;
+        }
 
-            if (skillTitleEl.textContent === updatedSkill.skillName) {
-                card.querySelector('.skill-level-text').textContent = updatedSkill.skillLevel + '%';
-                card.querySelector('.progress-bar').style.width = updatedSkill.skillLevel + '%';
+        card.querySelector('.skill-title').textContent = msg.skill.skillName;
+        card.querySelector('.skill-level-text').textContent = msg.skill.skillLevel + '%';
+        card.querySelector('.progress-bar').style.width = msg.skill.skillLevel + '%';
+    }
+}
+
+// ✅ DELETE
+channel3.onmessage = function (e) {
+    const msg = e.data;
+
+    if (msg.action === 'delete' && msg.id) {
+
+        const container = document.getElementById('skillsContainer');
+        if (container) {
+            const card = container.querySelector(`.skill-item[data-id="${msg.id}"]`);
+            if (card) {
+                card.remove();
             }
-        });
+        }
+
+        const row = document.querySelector(`tr[data-id="${msg.id}"]`);
+        if (row) {
+            row.remove();
+        }
     }
 }

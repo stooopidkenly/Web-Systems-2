@@ -40,4 +40,6 @@ class Skills
         $stmt = $this->pdo->prepare("DELETE FROM skills WHERE id = ?");
         return $stmt->execute([$id]);
     }
+
+    
 }
