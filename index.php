@@ -183,9 +183,10 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 </div>
 
             </div>
+
             <div class="contactFormWrapper">
                 <h2>Contact Me</h2>
-                <form class="contactForm" action="process_contact.php" method="POST">
+                <form class="contactForm">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" placeholder="Your Name" required>
                     <label for="email">Email</label>
@@ -198,6 +199,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
                     <div id="form-messages" aria-live="polite"></div> <!-- For success/error messages -->
                 </form>
             </div>
+
         </div>
     </div>
 
@@ -226,6 +228,7 @@ $titles = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <script src="js/certsChannel.js"></script>
     <script src="js/linksChannel.js"></script>
     <script src="js/titleChannel.js"></script>
+    <script src="email.js"></script>
 </body>
 
 </html>

@@ -4,3 +4,12 @@ adminDashboard.php
 Education.php
 styles2.css
 User.php
+js/refreshEducation.js
+admin/actions/updateProject.php
+adminDashboard.php
+Education.php
+styles2.css
+User.php
+admin/actions/getEducation.php
+admin/actions/updateProject.php
+js/refreshEducation.js
