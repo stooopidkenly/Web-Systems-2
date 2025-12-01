@@ -13,3 +13,4 @@ User.php
 admin/actions/getEducation.php
 admin/actions/updateProject.php
 js/refreshEducation.js
+schema.md
