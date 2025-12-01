@@ -19,9 +19,12 @@ try {
 // 4710914
 
 //actual deployment
-// password = PracticePortfolio_123
+// password = Portfolio_Pamor3E
 
 //host = fdb1032.awardspace.net
 
 //name = 4671494_portfolio
 // user = 	4671494_portfolio
+
+
+// ftp password = UYUHm#dD3nX*wqqq
