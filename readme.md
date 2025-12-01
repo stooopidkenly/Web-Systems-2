@@ -1,88 +1,82 @@
 🖥️ Portfolio Template
 
-A clean and customizable personal portfolio website developed to help students, developers, and creatives present their work in a simple but organized way.
-This template uses a schema-based system so you can edit your details easily without touching multiple files.
+A clean, modern, and fully customizable personal portfolio website.  
+Perfect for students, developers, and creatives who want a dynamic portfolio with an admin panel.
 
-📚 Table of Contents
+## 📚 Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation & Setup](#installation--setup)
+- [Database Setup (schema.example.md)](#database-setup-schemaexamplemd)
+- [Admin Panel](#admin-panel)
+- [Developer](#developer)
 
-✨ Features
+## ✨ Features
+- Fully dynamic content pulled from MySQL database  
+- Unlimited projects, skills, education, certifications, and social links  
+- Working contact form with PHP backend (email configuration needed)  
+- Beautiful admin dashboard to manage everything  
+- Responsive & minimalist design  
+- Easy to customize colors, fonts, and layout  
 
-🧰 Tech Stack
+## 🧰 Tech Stack
 
-⚙️ Installation (Local Setup)
+| Category        | Technology                     |
+|-----------------|--------------------------------|
+| Frontend        | HTML, CSS, JavaScript, Bootstrap |
+| Backend         | PHP 8+                         |
+| Database        | MySQL / MariaDB                |
+| Local Server    | XAMPP, Laragon, WAMP, MAMP     |
+| Version Control | Git & GitHub                   |
 
-📝 Schema Guide
+## ⚙️ Installation & Setup
 
-👥 Developer
+1. **Clone the repository**  
+   ```bash
+   git clone https://github.com/stooopidkenly/Web-Systems-2.git
 
-✨ Features
+Enter the folderBashcd Web-Systems-2
+Copy the entire folder into your local server directory
+(e.g., htdocs in XAMPP, www in Laragon/WAMP)
+Start Apache & MySQL in your local server
+Import the database → see Database Setup below
+Configure database connection in (dbConnection.php);
+Open sendEmail.php and update your receiving email + SMTP (if needed) (configure if needed)
+Visit in browser
+→ http://localhost/Web-Systems-2
 
-✅ Schema-Based Content
-Update your information from one file (schema.example.md) without editing the HTML directly.
+Database Setup (schema.example.md)
+Inside the repo, open schema.example.md — it contains the complete MySQL schema + dummy INSERT queries.
+Steps:
 
-✅ Project Showcase Section
-Add unlimited projects with titles, descriptions, and links.
+Create a new database (e.g., portfolio_db)
+Copy everything from schema.example.md
+Paste and run it in phpMyAdmin (or any MySQL client)
 
-✅ Contact Form (PHP Supported)
-Already includes backend logic — you just need to modify the email sending settings.
+This will automatically:
 
-✅ Clean & Organized Structure
-Easy to edit, extend, and customize.
+Create all required tables (about, education, projects, skills, social_links, certifications, etc.)
+Insert beautiful dummy data so your portfolio looks complete instantly
 
-🧰 Tech Stack
-Category	Technology
-Frontend	HTML, CSS, JavaScript
-Backend	PHP (for optional email form)
-Data Structure	JSON Schema
-Server	Any Apache/XAMPP/Laragon setup
-Version Control	Git & GitHub
-⚙️ Installation (Local Setup)
+You can then edit/delete/add rows directly in phpMyAdmin or via the admin panel.
+Admin Panel
+Access: http://localhost/Web-Systems-2/admin/login.php
+Default credentials (change immediately!):
 
-Follow these steps to run and edit the Portfolio Template:
+For credentials of admin, insert this query;
+Username: admin
+Password: admin123
 
-1. Clone the repository
-git clone https://github.com/stooopidkenly/Web-Systems-2.git
+From the admin panel you can:
 
-2. Go to the project directory
-cd Web-Systems-2
-
-3. Copy the schema.example and paste in into your prefered server (XAMPP, MAMP, WAMP)
-
-4. You must follow exactly the structure shown in schema.example to avoid errors.
-
-5. Modify your email sending settings
-
-Open sendEmail.php and update:
-
-Your receiving email
-
-SMTP or hosting mail settings (optional)
-
-Email subject/message template
-
-6. Open the project in your browser
-
-Just run it through your local server (XAMPP, WAMP, Laragon, etc.).
-
-📝 Schema Guide
-
-Inside schema., you can update:
-
-User Information
-
-Education Information
-
-Projects
-
-Skills
-
-Social Links
-
-If you add or remove keys that aren’t in schema.example, rendering may break — so follow the example format.
-But if there is an error, feel free to modify and explore it.
+Update your name, title, about section
+Add/edit/delete projects, skills, education, certifications
+Manage social links
+View contact form messages
 
 👥 Developer
+stooopidkenly – Creator & maintainer
 
-👨‍💻 stooopidkenly
-Creator and maintainer of this template.
-Feel free to fork, improve, and build something awesome with it.
+Feel free to fork, star, improve, and deploy your own version! 🚀
+
+Made with ❤️ for the dev community

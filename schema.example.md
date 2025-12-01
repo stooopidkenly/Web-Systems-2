@@ -73,7 +73,7 @@ INSERT INTO certs (id, certs, name) VALUES
 );
 
 INSERT INTO admin (username, password) 
-VALUES ('your admin username', 'your admin password');
+VALUES ('admin', 'admin123');
     
 
 INSERT INTO links (platform, link)
