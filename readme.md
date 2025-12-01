@@ -74,7 +74,7 @@ Add/edit/delete projects, skills, education, certifications
 Manage social links
 View contact form messages
 
-👥 Developer
+👥 Developer <br>
 stooopidkenly – Creator & maintainer
 
 Feel free to fork, star, improve, and deploy your own version! 🚀
