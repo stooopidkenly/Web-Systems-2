@@ -13,7 +13,15 @@ try {
     die("Database connection failed: " . $e->getMessage());
 }
 
+//practice deployment
 // password = PracticePortfolio_123
-
 // f32-preview.awardspace.net
 // 4710914
+
+//actual deployment
+// password = PracticePortfolio_123
+
+//host = fdb1032.awardspace.net
+
+//name = 4671494_portfolio
+// user = 	4671494_portfolio
