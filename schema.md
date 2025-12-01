@@ -172,3 +172,10 @@ VALUES
     'projects/task.png'
 );
 
+INSERT INTO titles (title) VALUES
+('a Student'),
+('an Aspiring Web Developer'),
+('an Aspiring Software Engineer'),
+('an Aspiring UI/UX Designer'),
+('a Problem Solver'),
+('a cutie pie :)');
